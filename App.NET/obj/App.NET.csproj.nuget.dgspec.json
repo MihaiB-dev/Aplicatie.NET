@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj": {}
   },
   "projects": {
-    "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj": {
+    "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj",
         "projectName": "App.NET",
-        "projectPath": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -49,6 +49,16 @@
               "version": "[6.0.22, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[6.0.22, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.22, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.22, )"
             },
