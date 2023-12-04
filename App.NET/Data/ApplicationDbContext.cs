@@ -18,7 +18,11 @@ namespace App.NET.Data
         public DbSet<Score> Scores { get; set; }
 
         public DbSet<Badge> Badges { get; set; }
-
+        // adaug clasele project, task, comment, user_task
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Task_table> Tasks { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<User_task> User_tasks { get; set; }
 
         //sfarsit de tabele
 
@@ -39,6 +43,22 @@ namespace App.NET.Data
             .HasOne(ac => ac.Team)
             .WithMany(ac => ac.Team_member)
             .HasForeignKey(ac => ac.Team_id);
+
+            // definire primary key compus
+            modelBuilder.Entity<User_task>()
+                .HasKey(ac => new { ac.User_id, ac.Task_id });
+            // definire relatii cu modelele Category si Article (FK)
+            modelBuilder.Entity<User_task>()
+                .HasOne(ac => ac.User)
+                .WithMany(ac => ac.User_task)
+                .HasForeignKey(ac => ac.User_id);
+            modelBuilder.Entity<User_task>()
+                .HasOne(ac => ac.Task)
+                .WithMany(ac => ac.User_task)
+                .HasForeignKey(ac => ac.Task_id);
+
+            
+         
         }
 
     }

@@ -22,6 +22,79 @@ namespace App.NET.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("App.NET.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("total_points")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("App.NET.Models.Badge", b =>
                 {
                     b.Property<int>("Id")
@@ -45,6 +118,81 @@ namespace App.NET.Data.Migrations
                     b.HasIndex("ScoreId");
 
                     b.ToTable("Badges");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Id_task")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id_user")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Team_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title_project")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("User_id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("App.NET.Models.Score", b =>
@@ -78,6 +226,43 @@ namespace App.NET.Data.Migrations
                     b.HasIndex("Team_memberUser_id", "Team_memberTeam_id");
 
                     b.ToTable("Scores");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Task_table", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Data_end")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Data_start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description_task")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Project_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title_task")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("App.NET.Models.Team", b =>
@@ -114,6 +299,21 @@ namespace App.NET.Data.Migrations
                     b.HasIndex("Team_id");
 
                     b.ToTable("Team_members");
+                });
+
+            modelBuilder.Entity("App.NET.Models.User_task", b =>
+                {
+                    b.Property<string>("User_id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Task_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("User_id", "Task_id");
+
+                    b.HasIndex("Task_id");
+
+                    b.ToTable("User_tasks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -166,77 +366,6 @@ namespace App.NET.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -326,12 +455,9 @@ namespace App.NET.Data.Migrations
 
             modelBuilder.Entity("App.NET.Models.ApplicationUser", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<int>("total_points")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
+                    b.HasOne("App.NET.Models.Project", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("App.NET.Models.Badge", b =>
@@ -343,6 +469,30 @@ namespace App.NET.Data.Migrations
                     b.Navigation("Score");
                 });
 
+            modelBuilder.Entity("App.NET.Models.Comment", b =>
+                {
+                    b.HasOne("App.NET.Models.Task_table", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId");
+
+                    b.HasOne("App.NET.Models.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Task");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Project", b =>
+                {
+                    b.HasOne("App.NET.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("App.NET.Models.Score", b =>
                 {
                     b.HasOne("App.NET.Models.Team_member", "Team_member")
@@ -350,6 +500,15 @@ namespace App.NET.Data.Migrations
                         .HasForeignKey("Team_memberUser_id", "Team_memberTeam_id");
 
                     b.Navigation("Team_member");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Task_table", b =>
+                {
+                    b.HasOne("App.NET.Models.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("App.NET.Models.Team_member", b =>
@@ -371,6 +530,25 @@ namespace App.NET.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("App.NET.Models.User_task", b =>
+                {
+                    b.HasOne("App.NET.Models.Task_table", "Task")
+                        .WithMany("User_task")
+                        .HasForeignKey("Task_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.NET.Models.ApplicationUser", "User")
+                        .WithMany("User_task")
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -382,7 +560,7 @@ namespace App.NET.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("App.NET.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -391,7 +569,7 @@ namespace App.NET.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("App.NET.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -406,7 +584,7 @@ namespace App.NET.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("App.NET.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -415,19 +593,35 @@ namespace App.NET.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("App.NET.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("App.NET.Models.Team", b =>
+            modelBuilder.Entity("App.NET.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Team_member");
+
+                    b.Navigation("User_task");
                 });
 
-            modelBuilder.Entity("App.NET.Models.ApplicationUser", b =>
+            modelBuilder.Entity("App.NET.Models.Project", b =>
+                {
+                    b.Navigation("Tasks");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Task_table", b =>
+                {
+                    b.Navigation("User_task");
+                });
+
+            modelBuilder.Entity("App.NET.Models.Team", b =>
                 {
                     b.Navigation("Team_member");
                 });

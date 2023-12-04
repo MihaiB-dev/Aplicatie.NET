@@ -9,5 +9,11 @@ namespace App.NET.Models
 
         //legatura many-to-many cu echipe
         public virtual ICollection<Team_member>? Team_member { get; set; }
+
+        //legatura many-to-many cu taskuri
+        public virtual ICollection<User_task>? User_task { get; set; }
+
+        // legatura cu comentarii
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }
