@@ -14,7 +14,5 @@ namespace App.NET.Models
         public virtual ICollection<Task_table> Tasks { get; set; }  
         public string title { get; set; }
         public string? description { get; set; }
-        public string password { get; set; }
-
     }
 }
