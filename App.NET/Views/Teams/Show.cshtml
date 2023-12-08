@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Show";
+}}
+
+
+<h2>Afisare echipa</h2>
+
+<br />
+
+<p>@ViewBag.Teams.Name</p>
+
+<a href="/Teams/Index"> Afisare echipe </a>
+
+<form method="post"
+    action="/Teams/Delete/@ViewBag.Teams.Id">
+    <button type="submit">Sterge echipa</button>
+
+</form>

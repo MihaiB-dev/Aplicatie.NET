@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Editare echipa";
+}
+
+
+<h2>Editare echipa</h2>
+
+<br />
+
+<form method="post"
+    action="/Teams/Edit/@ViewBag.Team.Id">
+    <label>Nume</label>
+    <br />
+    <input type="text" name="Name"
+        value="@ViewBag.Team.Name" />
+    <br /> <br />
+    <label>Adresa e-mail</label>
+    <br />
+    <input type="text" name="Email"
+        value="@ViewBag.Team.Email" />
+    <br /> <br />
+    <button type="submit">Modifica echipa</button>
+
+</form>

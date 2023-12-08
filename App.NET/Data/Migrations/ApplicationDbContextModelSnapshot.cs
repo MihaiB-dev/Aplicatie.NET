@@ -180,10 +180,6 @@ namespace App.NET.Data.Migrations
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -283,7 +279,7 @@ namespace App.NET.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("teams");
+                    b.ToTable("Team");
                 });
 
             modelBuilder.Entity("App.NET.Models.Team_member", b =>
@@ -294,11 +290,14 @@ namespace App.NET.Data.Migrations
                     b.Property<int>("Team_id")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.HasKey("User_id", "Team_id");
 
                     b.HasIndex("Team_id");
 
-                    b.ToTable("Team_members");
+                    b.ToTable("Team_member");
                 });
 
             modelBuilder.Entity("App.NET.Models.User_task", b =>
@@ -309,11 +308,14 @@ namespace App.NET.Data.Migrations
                     b.Property<int>("Task_id")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.HasKey("User_id", "Task_id");
 
                     b.HasIndex("Task_id");
 
-                    b.ToTable("User_tasks");
+                    b.ToTable("User_task");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

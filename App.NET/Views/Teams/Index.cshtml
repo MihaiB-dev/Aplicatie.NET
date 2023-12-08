@@ -1,0 +1,17 @@
+﻿@*
+    Afisare echipe
+*@
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Afisare Echipe!</h2>
+
+<br />
+<h1>@ViewBag.UserName</h1>
+@foreach (var team in ViewBag.Teams)
+{
+    <p>@team.Name</p>
+    <a href="/Teams/Show/@team.Id"> Afisare echipe </a>
+}

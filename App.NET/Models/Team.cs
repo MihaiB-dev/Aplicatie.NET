@@ -11,5 +11,7 @@ namespace App.NET.Models
 
         //connection many to many with user
         public virtual ICollection <Team_member> Team_member { get; set; }
+
+
     }
 }
