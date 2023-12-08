@@ -311,6 +311,9 @@ namespace App.NET.Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("Media")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("User_id", "Task_id");
 
                     b.HasIndex("Task_id");

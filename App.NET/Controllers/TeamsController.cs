@@ -33,10 +33,16 @@ namespace App.NET.Controllers
         {
             
            Team teams = db.Team.Find(id);
-           Team_member team_member = db.Team_member.Include("Team")
-                                        .Where(team_member => team_member.Team_id == id)
-                                        .First();
-            ApplicationUser users = (ApplicationUser)db.ApplicationUsers.Where(user => team_member.User_id == user.Id);
+            ICollection<Team_member> team_member = db.Team_members.Include("Team")
+                                         .Where(team_member => team_member.Team_id == id).ToList();
+
+            ///ApplicationUser users = db.ApplicationUsers.Where(user => team_member.User_id == user.Id);
+
+
+            /// join team_member cu user si cu team
+            ICollection<ApplicationUser> users = db.ApplicationUsers.Include(team_member)
+                                         .Where(user => user.Team_member.Team_id == id).ToList();
+
             
 
 
