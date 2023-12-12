@@ -15,7 +15,7 @@ namespace App.NET.Data
         //aici se adauga toate tabelele create
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Team_member> Team_members { get; set; }
-        public DbSet<Team> teams { get; set; }
+        public DbSet<Team> Teams { get; set; }
         public DbSet<Score> Scores { get; set; }
 
         public DbSet<Badge> Badges { get; set; }

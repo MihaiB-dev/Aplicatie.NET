@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Project
+
+<h2>@Model.Title_project</h2>
+
+<p>@Model.Description</p>
+
+<h3>Tasks</h3>
+@if (ViewBag.Tasks != null && ViewBag.Tasks.Any())
+{
+    <ul>
+        @foreach (var task in ViewBag.Tasks)
+        {
+            <li>@task.Title_task</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No tasks for this project.</p>
+}

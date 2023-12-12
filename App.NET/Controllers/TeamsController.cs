@@ -2,96 +2,91 @@
 using App.NET.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System;
-using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace App.NET.Controllers
 {
     public class TeamsController : Controller
     {
-        // facem CRUD pentru Team
+        private readonly ApplicationDbContext _db;
 
-        private readonly ApplicationDbContext db;
-        public TeamsController(ApplicationDbContext context)
+        public TeamsController(ApplicationDbContext db)
         {
-            db = context;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-            var teams = from team in db.Team
-                        orderby team.Id
-                        select team;
+            var teams = _db.Teams.OrderBy(team => team.Id).ToList();
             ViewBag.Teams = teams;
-            var UserName = HttpContext.User.Identity.Name;
-            ViewBag.UserName = UserName;
+            var userName = HttpContext.User.Identity.Name;
+            ViewBag.UserName = userName;
             return View();
         }
-      
+
         public IActionResult Show(int id)
         {
-            
-           Team teams = db.Team.Find(id);
-            ICollection<Team_member> team_member = db.Team_members.Include("Team")
-                                         .Where(team_member => team_member.Team_id == id).ToList();
+            Team team = _db.Teams.Find(id);
 
-            ///ApplicationUser users = db.ApplicationUsers.Where(user => team_member.User_id == user.Id);
+            if (team == null)
+            {
+                return NotFound();
+            }
 
+            ICollection<Team_member> teamMembers = _db.Team_members.Include(tm => tm.User)
+                                                                   .Where(tm => tm.Team_id == id)
+                                                                   .ToList();
 
-            /// join team_member cu user si cu team
-            ICollection<ApplicationUser> users = db.ApplicationUsers.Include(team_member)
-                                         .Where(user => user.Team_member.Team_id == id).ToList();
+            ViewBag.Team = team;
+            ViewBag.TeamMembers = teamMembers;
 
-            
-
-
-            ViewBag.Teams = teams;
-            ViewBag.Users = users;
-
-            return View(teams);
-           
+            return View(team);
         }
-     
 
         public IActionResult New()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult New(Team team)
         {
             try
             {
-                
-                db.Team.Add(team);
-                var UserName= HttpContext.User.Identity.Name;
-                ApplicationUser user = db.ApplicationUsers.Where(user => user.UserName == UserName).First();
+                _db.Teams.Add(team);
+                var userName = HttpContext.User.Identity.Name;
+                ApplicationUser user = _db.ApplicationUsers.SingleOrDefault(u => u.UserName == userName);
 
-                db.Team_member.Add(new Team_member
+                if (user != null)
                 {
-                    Team_id = team.Id,
-                    User_id = user.Id
-                });
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    _db.Team_members.Add(new Team_member
+                    {
+                        Team_id = team.Id,
+                        User_id = user.Id
+                    });
+                }
 
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
             catch (Exception)
             {
+                // Poți adăuga un mesaj de eroare aici, dacă este necesar
                 return View();
             }
         }
-        /*
-        catch (Exception)
-        {
-            return View();
-        }
-        */
 
         public IActionResult Edit(int id)
         {
-            Team team = db.Team.Find(id);
+            Team team = _db.Teams.Find(id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
             ViewBag.Team = team;
             return View(team);
         }
@@ -99,34 +94,40 @@ namespace App.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Team requestTeam)
         {
-            Team team = db.Team.Find(id);
+            Team team = _db.Teams.Find(id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
 
             try
             {
                 team.Name = requestTeam.Name;
-                db.SaveChanges();
+                _db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
             catch (Exception)
             {
-                return RedirectToAction("Edit", team.Id);
+                // Poți adăuga un mesaj de eroare aici, dacă este necesar
+                return RedirectToAction("Edit", new { id });
             }
         }
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            Team team = db.Team.Find(id);
-            db.Team.Remove(team);
-            db.SaveChanges();
+            Team team = _db.Teams.Find(id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            _db.Teams.Remove(team);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-
-  
-
     }
-
-    
 }

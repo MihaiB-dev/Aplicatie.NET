@@ -12,7 +12,6 @@ namespace App.NET.Models
         public int ? Team_id { get; set; }
         public virtual Team? Team { get; set; }
         public virtual ICollection<Task_table> Tasks { get; set; }  
-        public string title { get; set; }
-        public string? description { get; set; }
+        public string? Description { get; set; }
     }
 }
