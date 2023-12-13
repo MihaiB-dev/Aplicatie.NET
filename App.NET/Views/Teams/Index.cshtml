@@ -2,16 +2,32 @@
     Afisare echipe
 *@
 
-@{
-    ViewBag.Title = "Index";
-}
+@model List<Team>
 
-<h2>Afisare Echipe!</h2>
+<h2>Teams</h2>
 
-<br />
-<h1>@ViewBag.UserName</h1>
-@foreach (var team in ViewBag.Teams)
-{
-    <p>@team.Name</p>
-    <a href="/Teams/Show/@team.Id"> Afisare echipe </a>
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var team in Model)
+        {
+            <tr>
+                <td>@team.Name</td>
+                <td>
+                    <a asp-action="Show" asp-route-id="@team.Id">Show</a> |
+                    <a asp-action="Edit" asp-route-id="@team.Id">Edit</a> |
+                    <form asp-action="Delete" asp-route-id="@team.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="New" class="btn btn-primary">New Team</a>

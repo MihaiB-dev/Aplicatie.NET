@@ -73,7 +73,6 @@ namespace App.NET.Controllers
             }
             catch (Exception)
             {
-                // Poți adăuga un mesaj de eroare aici, dacă este necesar
                 return View();
             }
         }
@@ -110,7 +109,6 @@ namespace App.NET.Controllers
             }
             catch (Exception)
             {
-                // Poți adăuga un mesaj de eroare aici, dacă este necesar
                 return RedirectToAction("Edit", new { id });
             }
         }
