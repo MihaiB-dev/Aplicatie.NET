@@ -6,21 +6,29 @@
 
 @model Project
 
-<h2>@Model.Title_project</h2>
+@{
+    if (Model != null)
+    {
+        <h2>@Model.Title_project</h2>
+        <p>@Model.Description</p>
 
-<p>@Model.Description</p>
-
-<h3>Tasks</h3>
-@if (ViewBag.Tasks != null && ViewBag.Tasks.Any())
-{
-    <ul>
-        @foreach (var task in ViewBag.Tasks)
+        <h3>Tasks</h3>
+        if (ViewBag.Tasks != null && ViewBag.Tasks.Any())
         {
-            <li>@task.Title_task</li>
+            <ul>
+                @foreach (var task in ViewBag.Tasks)
+                {
+                    <li>@task.Title_task</li>
+                }
+            </ul>
         }
-    </ul>
-}
-else
-{
-    <p>No tasks for this project.</p>
+        else
+        {
+            <p>No tasks for this project.</p>
+        }
+    }
+    else
+    {
+        <p>Project not found.</p>
+    }
 }

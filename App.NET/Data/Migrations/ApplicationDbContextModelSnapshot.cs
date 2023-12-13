@@ -164,6 +164,9 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
@@ -175,13 +178,6 @@ namespace App.NET.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User_id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
