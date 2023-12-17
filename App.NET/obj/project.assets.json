@@ -11135,11 +11135,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj",
+      "projectUniqueName": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj",
       "projectName": "App.NET",
-      "projectPath": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj",
+      "projectPath": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\obj\\",
+      "outputPath": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

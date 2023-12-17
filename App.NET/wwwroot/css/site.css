@@ -39,3 +39,27 @@ body {
 .changer{
     display:flex;
 }
+
+.word1 {
+    color: rgb(238, 178, 100);
+}
+
+.word2 {
+    color: rgb(124, 178, 240);
+}
+
+.word3 {
+    color: rgba(92, 232, 141, 0.892);
+}
+
+.word4 {
+    color: rgba(239, 111, 111, 0.892);
+}
+
+.word5 {
+    color: rgba(247, 132, 207, 0.903);
+}
+
+.word6 {
+    color: rgb(224, 171, 102);
+}
