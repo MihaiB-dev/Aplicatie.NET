@@ -6,11 +6,11 @@ namespace App.NET.Models
     {
         [Key]
         public int Id { get; set; }
-        public int team_member_id { get; set; }
+        public int? Team_memberId { get; set; }
         public virtual Team_member? Team_member { get; set; }
-        public DateTime date { get; set; }
-        public int score { get; set; }
+        public DateTime DateScore { get; set; }
+        public int? Points { get; set; }
 
-        public int? bonus { get; set; }
+        public int? Bonus { get; set; }
     }
 }

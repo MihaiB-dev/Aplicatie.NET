@@ -6,7 +6,7 @@ namespace App.NET.Models
     {
         [Key]
         public int Id { get; set; }
-        public string User_id { get; set; }
+        public string? User_id { get; set; }
         public int Team_id { get; set; }
 
         public virtual ApplicationUser User { get; set; }

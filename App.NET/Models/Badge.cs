@@ -7,8 +7,8 @@ namespace App.NET.Models
         [Key]
         public int Id { get; set; }
 
-        public int score_id { get; set; }
+        public int ScoreId { get; set; }
         public virtual Score? Score { get; set; }
-        public string title_badge { get; set; }
+        public string? TitleBadge { get; set; }
     }
 }

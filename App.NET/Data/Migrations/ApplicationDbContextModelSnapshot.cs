@@ -70,15 +70,15 @@ namespace App.NET.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Total_points")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int>("total_points")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -103,14 +103,10 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ScoreId")
+                    b.Property<int>("ScoreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("score_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("title_badge")
-                        .IsRequired()
+                    b.Property<string>("TitleBadge")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -128,10 +124,10 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Id_task")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Id_user")
+                    b.Property<int>("Id_task")
                         .HasColumnType("int");
 
                     b.Property<int?>("TaskId")
@@ -144,8 +140,8 @@ namespace App.NET.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("User_id")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -195,23 +191,23 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("Bonus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateScore")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Team_memberId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Team_memberTeam_id")
                         .HasColumnType("int");
 
                     b.Property<string>("Team_memberUser_id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("bonus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("score")
-                        .HasColumnType("int");
-
-                    b.Property<int>("team_member_id")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -301,7 +297,7 @@ namespace App.NET.Data.Migrations
                     b.Property<string>("User_id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Task_id")
+                    b.Property<int?>("Task_id")
                         .HasColumnType("int");
 
                     b.Property<int>("Id")
@@ -465,7 +461,9 @@ namespace App.NET.Data.Migrations
                 {
                     b.HasOne("App.NET.Models.Score", "Score")
                         .WithMany()
-                        .HasForeignKey("ScoreId");
+                        .HasForeignKey("ScoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Score");
                 });
