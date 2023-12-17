@@ -15,13 +15,13 @@ namespace App.NET.Controllers
 
         public IActionResult Index(int team_id)
         {
-            var projects = db.Projects
-                        .Include(p => p.Team)
-                        .Where(project => project.User_id == User.Identity.Name && project.Team_id == team_id)
-                        .ToList();
+            //var projects = db.Projects
+                        //.Include(p => p.Team)
+                        //.Where(project => project.User_id == User.Identity.Name && project.Team_id == team_id)
+                        //.ToList();
 
-
-            return View(projects);
+            //add in view projects
+            return View();
         }
 
         public IActionResult Show(int id)

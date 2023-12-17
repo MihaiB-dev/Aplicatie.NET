@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Dongle&family=IBM+Plex+Sans:wght@400;500&family=Kalam&display=swap');
+
 html {
   font-size: 14px;
 }
@@ -15,4 +17,25 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.main-text{
+    text-align:center;
+    margin-top:6rem;
+    margin-bottom:6rem;
+}
+.main-text h3 {
+    font-size: 3rem;
+    padding-left: 7rem;
+    font-family: 'Kalam', cursive;
+    padding-right: 7rem;
+    font-weight:bold;
+}
+.main-text p {
+    font-size: 1.2rem;
+    font-family: 'Kalam', cursive;
+}
+
+.changer{
+    display:flex;
 }
