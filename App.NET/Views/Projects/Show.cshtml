@@ -4,31 +4,32 @@
 @{
 }
 
-@model Project
+@model App.NET.Models.Project
 
-@{
-    if (Model != null)
-    {
-        <h2>@Model.Title_project</h2>
-        <p>@Model.Description</p>
+<h2 class="text-center">@Model.Title_project</h2>
 
-        <h3>Tasks</h3>
-        if (ViewBag.Tasks != null && ViewBag.Tasks.Any())
-        {
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <p>@Model.Description</p>
+            <p>Echipa: @Model.Team?.Name</p>
+        </div>
+        <div class="col-md-6">
+            <h3>Task-uri:</h3>
             <ul>
-                @foreach (var task in ViewBag.Tasks)
+                @foreach (var task in Model.Tasks)
                 {
                     <li>@task.Title_task</li>
                 }
             </ul>
-        }
-        else
-        {
-            <p>No tasks for this project.</p>
-        }
-    }
-    else
-    {
-        <p>Project not found.</p>
-    }
-}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <a href="/Projects/Edit/@Model.Id" class="btn btn-warning">Editează</a>
+            <form method="post" action="/Projects/Delete/@Model.Id" class="d-inline">
+                <button type="submit" class="btn btn-danger">Șterge</button>
+            </form>
+        </div>
+    </div>
+</div>

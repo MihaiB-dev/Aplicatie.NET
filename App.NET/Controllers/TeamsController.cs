@@ -33,8 +33,10 @@ namespace App.NET.Controllers
             ViewBag.Teams = teams;
             var userName = HttpContext.User.Identity.Name;
             ViewBag.UserName = userName;
-            return View();
+
+            return View(teams); // Asigură-te că transmiți lista de echipe la View
         }
+
 
         public IActionResult Show(int id)
         {

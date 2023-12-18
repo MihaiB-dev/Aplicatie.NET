@@ -4,19 +4,33 @@
 @{
 }
 
-@model Project
+@model App.NET.Models.Project
 
-<h2>New Project</h2>
+<h2 class="text-center">Adaugare Proiect</h2>
 
-<form asp-action="New" method="post">
-    <div class="form-group">
-        <input type="hidden" name="Team_id" value="1" />
-        <label for="Title_project">Title</label>
-        <input type="text" class="form-control" id="Title_project" name="Title_project" value="@Model.Title_project" required>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            @if (ViewBag.Teams != null)
+            {
+                @using (Html.BeginForm("New", "Projects", FormMethod.Post))
+                {
+                    @Html.LabelFor(model => model.Title_project)
+                    @Html.TextBoxFor(model => model.Title_project, new { @class = "form-control" })
+
+                    @Html.LabelFor(model => model.Description)
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+
+                    @Html.LabelFor(model => model.Team_id)
+                    @Html.DropDownListFor(model => model.Team_id, (SelectList)ViewBag.Teams, "Selectați echipa", new { @class = "form-control" })
+
+                    <button type="submit" class="btn btn-success mt-3">Adaugă Proiect</button>
+                }
+            }
+            else
+            {
+                <p>Eroare: ViewBag.Teams este null.</p>
+            }
+        </div>
     </div>
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+</div>

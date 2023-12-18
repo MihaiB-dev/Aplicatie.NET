@@ -1,7 +1,9 @@
 ﻿using App.NET.Data;
 using App.NET.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.NET.Controllers
@@ -24,57 +26,75 @@ namespace App.NET.Controllers
             _roleManager = roleManager;
         }
 
+
         public IActionResult Index(int team_id)
         {
-            //var projects = db.Projects
-                        //.Include(p => p.Team)
-                        //.Where(project => project.User_id == User.Identity.Name && project.Team_id == team_id)
-                        //.ToList();
+            var projects = db.Projects.ToList();
+            ViewBag.Projects = projects;
 
-            //add in view projects
             return View();
         }
 
         public IActionResult Show(int id)
         {
-            Project project = db.Projects.Find(id);
+            Project project = db.Projects
+                .Include(p => p.Tasks)
+                .FirstOrDefault(p => p.Id == id);
 
-            ICollection<Task_table> tasks = db.Tasks
-                .Include(t => t.Project)
-                .Where(task => task.Project_id == id)
-                .ToList();
+            if (project == null)
+            {
+                return NotFound();
+            }
 
-            ViewBag.Tasks = tasks;
             return View(project);
         }
 
         public IActionResult New()
         {
+            ViewBag.Teams = new SelectList(db.Teams, "Id", "Name");
             Project newProject = new Project();
             return View(newProject);
         }
 
+
+
         [HttpPost]
         public IActionResult New(Project project)
         {
-            if (ModelState.IsValid)
+            try
             {
+                if (project.Tasks == null)
+                {
+                    project.Tasks = new List<Task_table>();
+                }
+
                 db.Projects.Add(project);
                 db.SaveChanges();
-                TempData["message"] = "Proiectul a fost adaugat!";
+
+                TempData["message"] = "Proiectul a fost adăugat!";
                 return RedirectToAction("Index");
             }
-            else
+            catch (Exception ex)
             {
-                return View(project);
+                TempData["error"] = $"Eroare la adăugarea proiectului: {ex.Message}";
+                return RedirectToAction("New");
             }
         }
 
+
+
         public IActionResult Edit(int id)
         {
-            Project project = db.Projects.Find(id);
+            Project project = db.Projects.FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
             return View(project);
         }
+
 
         [HttpPost]
         public IActionResult Edit(int id, Project requestProject)

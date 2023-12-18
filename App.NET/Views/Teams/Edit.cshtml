@@ -1,25 +1,12 @@
-﻿
-@{
-    ViewBag.Title = "Editare echipa";
-}
+﻿@model Team
 
+<h2>Edit Team</h2>
 
-<h2>Editare echipa</h2>
-
-<br />
-
-<form method="post"
-    action="/Teams/Edit/@ViewBag.Team.Id">
-    <label>Nume</label>
-    <br />
-    <input type="text" name="Name"
-        value="@ViewBag.Team.Name" />
-    <br /> <br />
-    <label>Adresa e-mail</label>
-    <br />
-    <input type="text" name="Email"
-        value="@ViewBag.Team.Email" />
-    <br /> <br />
-    <button type="submit">Modifica echipa</button>
-
+<form asp-action="Edit" asp-route-id="@Model.Id">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>

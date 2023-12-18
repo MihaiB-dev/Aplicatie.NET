@@ -1,15 +1,12 @@
-﻿@*
-    Afisare echipe
-*@
+﻿@model List<Team>
 
-@model List<Team>
-
-<h2>Teams</h2>
+<h2>Team Index</h2>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Team Name</th>
+            <th>ID</th>
+            <th>Name</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -17,17 +14,16 @@
         @foreach (var team in Model)
         {
             <tr>
+                <td>@team.Id</td>
                 <td>@team.Name</td>
                 <td>
-                    <a asp-action="Show" asp-route-id="@team.Id">Show</a> |
+                    <a asp-action="Show" asp-route-id="@team.Id">Details</a> |
                     <a asp-action="Edit" asp-route-id="@team.Id">Edit</a> |
-                    <form asp-action="Delete" asp-route-id="@team.Id" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-link">Delete</button>
-                    </form>
+                    <a asp-action="Delete" asp-route-id="@team.Id">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-action="New" class="btn btn-primary">New Team</a>
+<a asp-action="New">Create New</a>

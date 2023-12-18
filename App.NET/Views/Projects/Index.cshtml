@@ -4,30 +4,41 @@
 @{
 }
 
-@model List<Project>
+@model IEnumerable<App.NET.Models.Project>
 
-<h2>Projects</h2>
+<h2 class="text-center">Proiecte</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var project in Model)
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-success p-3 rounded-3 text-center mb-5">
+        @TempData["message"]
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        @if (Model != null)
         {
-            <tr>
-                <td>@project.Title_project</td>
-                <td>@project.Description</td>
-                <td>
-                    <a asp-action="Show" asp-route-id="@project.Id">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@project.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@project.Id">Delete</a>
-                </td>
-            </tr>
+            @foreach (var project in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">@project.Title_project</h5>
+                            <p class="card-text">@project.Description</p>
+                            <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
+                            <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
+                            <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
+                                <button type="submit" class="btn btn-danger">Șterge</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
         }
-    </tbody>
-</table>
+        else
+        {
+            <p>Nu există proiecte de afișat.</p>
+        }
+    </div>
+</div>
