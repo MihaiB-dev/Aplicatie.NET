@@ -1,5 +1,6 @@
 ﻿using App.NET.Data;
 using App.NET.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,20 @@ namespace App.NET.Controllers
 {
     public class ProjectsController : Controller
     {
+        //adaugam user si roluri 
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         private readonly ApplicationDbContext db;
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             db = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index(int team_id)

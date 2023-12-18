@@ -1,5 +1,6 @@
 ﻿using App.NET.Data;
 using App.NET.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,11 +11,20 @@ namespace App.NET.Controllers
 {
     public class TeamsController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        //adaugam user si roluri 
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TeamsController(ApplicationDbContext db)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        private readonly ApplicationDbContext _db;
+        public TeamsController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _db = db;
+            _db = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()

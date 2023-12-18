@@ -10,6 +10,7 @@
 
 <form asp-action="New" method="post">
     <div class="form-group">
+        <input type="hidden" name="Team_id" value="1" />
         <label for="Title_project">Title</label>
         <input type="text" class="form-control" id="Title_project" name="Title_project" value="@Model.Title_project" required>
     </div>
