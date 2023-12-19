@@ -165,14 +165,8 @@ namespace App.NET.Data.Migrations
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Team_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title_project")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("User_id")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsersId")

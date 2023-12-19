@@ -27,21 +27,20 @@ namespace App.NET.Controllers
         }
         [Authorize(Roles = "User, Editor, Admin")]
 
-        public IActionResult Index(int team_id)
+        public IActionResult Index(int id)
         {
 
-            var projects = db.Projects.Where(p => p.Team_id == team_id);
-            ViewBag.Projects = projects;
+            var projects = db.Projects.Where(p => p.TeamId == id);
+            ViewBag.team_id = id;
+            // ViewBag.Projects = projects;
 
-            return View();
+            return View(projects);
         }
 
         public IActionResult Show(int id)
         {
-            Project project = db.Projects
-                .Include(p => p.Tasks)
-                .FirstOrDefault(p => p.Id == id);
-
+            var project =  db.Projects.Include("Task").Where(p => p.Id == id);
+                          
             if (project == null)
             {
                 return NotFound();
@@ -52,28 +51,35 @@ namespace App.NET.Controllers
 
         public IActionResult New()
         {
-            ViewBag.Teams = new SelectList(db.Teams, "Id", "Name");
+            // ViewBag.Teams = new SelectList(db.Teams, "Id", "Name");
+
             Project newProject = new Project();
+            
             return View(newProject);
         }
 
 
 
         [HttpPost]
+        //team se ia din link, project se ia din post
         public IActionResult New(Project project)
         {
             try
             {
-                if (project.Tasks == null)
-                {
-                    project.Tasks = new List<Task_table>();
-                }
+                //TODO trebuie sa verficam daca persoana se afla in echipa respectiva
+
+                //preiua id-ul de la echipa din care a apasat click. Il ia din view->show de la project (link)
+                project.TeamId =  Convert.ToInt32(HttpContext.Request.Query["team"]);
+
+                // project.Tasks = new List<Task_table>();
+
+                project.UsersId = _userManager.GetUserId(User);
 
                 db.Projects.Add(project);
                 db.SaveChanges();
 
                 TempData["message"] = "Proiectul a fost adăugat!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = project.TeamId});
             }
             catch (Exception ex)
             {

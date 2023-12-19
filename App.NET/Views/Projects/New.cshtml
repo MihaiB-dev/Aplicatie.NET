@@ -11,26 +11,29 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            @if (ViewBag.Teams != null)
-            {
+            @* @if (ViewBag.Teams != null)
+            {*@
                 @using (Html.BeginForm("New", "Projects", FormMethod.Post))
                 {
+                
                     @Html.LabelFor(model => model.Title_project)
                     @Html.TextBoxFor(model => model.Title_project, new { @class = "form-control" })
 
                     @Html.LabelFor(model => model.Description)
                     @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
 
-                    @Html.LabelFor(model => model.Team_id)
-                    @Html.DropDownListFor(model => model.Team_id, (SelectList)ViewBag.Teams, "Selectați echipa", new { @class = "form-control" })
+                    //@Html.LabelFor(model => model.Team_id)
+
+                    //@Html.DropDownListFor(model => model.Team_id, (SelectList)ViewBag.Teams, "Selectați echipa", new { @class = "form-control" })
 
                     <button type="submit" class="btn btn-success mt-3">Adaugă Proiect</button>
                 }
-            }
+           @* }
             else
             {
                 <p>Eroare: ViewBag.Teams este null.</p>
             }
+            *@
         </div>
     </div>
 </div>
