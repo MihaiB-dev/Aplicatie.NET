@@ -30,7 +30,7 @@ namespace App.NET.Controllers
         public IActionResult Index(int team_id)
         {
 
-            var projects = db.Projects.ToList();
+            var projects = db.Projects.Where(p => p.Team_id == team_id);
             ViewBag.Projects = projects;
 
             return View();
