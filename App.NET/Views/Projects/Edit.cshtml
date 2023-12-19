@@ -11,15 +11,20 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            @using (Html.BeginForm("Edit", "Projects", FormMethod.Post))
+            @using (Html.BeginForm("Edit", "Projects", FormMethod.Post, new{id = Model.Id}))
             {
                 @Html.HiddenFor(model => model.Id)
 
                 @Html.LabelFor(model => model.Title_project)
-                @Html.TextBoxFor(model => model.Title_project, new { @class = "form-control" })
+                @Html.EditorFor(m => m.Title_project, new {htmlAttributes = new {@class = "form-control" }})
 
                 @Html.LabelFor(model => model.Description)
                 @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(m => m.Description, null, new {@class="text-danger"})
+                <br />
+
+                <br />
 
                 @Html.LabelFor(model => model.Team_id)
                 @Html.DropDownListFor(model => model.Team_id, new SelectList(ViewBag.Teams, "Id", "Name", Model.Team_id), "Selectați echipa", new { @class = "form-control" })

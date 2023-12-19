@@ -25,10 +25,11 @@ namespace App.NET.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
+        [Authorize(Roles = "User, Editor, Admin")]
 
         public IActionResult Index(int team_id)
         {
+
             var projects = db.Projects.ToList();
             ViewBag.Projects = projects;
 

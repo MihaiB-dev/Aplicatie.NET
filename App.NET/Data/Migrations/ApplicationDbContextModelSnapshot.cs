@@ -64,9 +64,6 @@ namespace App.NET.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -89,8 +86,6 @@ namespace App.NET.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -180,9 +175,14 @@ namespace App.NET.Data.Migrations
                     b.Property<string>("User_id")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TeamId");
+
+                    b.HasIndex("UsersId");
 
                     b.ToTable("Projects");
                 });
@@ -454,13 +454,6 @@ namespace App.NET.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("App.NET.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("App.NET.Models.Project", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("App.NET.Models.Badge", b =>
                 {
                     b.HasOne("App.NET.Models.Score", "Score")
@@ -491,7 +484,13 @@ namespace App.NET.Data.Migrations
                         .WithMany()
                         .HasForeignKey("TeamId");
 
+                    b.HasOne("App.NET.Models.ApplicationUser", "Users")
+                        .WithMany("Projects")
+                        .HasForeignKey("UsersId");
+
                     b.Navigation("Team");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("App.NET.Models.Score", b =>
@@ -605,6 +604,8 @@ namespace App.NET.Data.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Projects");
+
                     b.Navigation("Team_member");
 
                     b.Navigation("User_task");
@@ -613,8 +614,6 @@ namespace App.NET.Data.Migrations
             modelBuilder.Entity("App.NET.Models.Project", b =>
                 {
                     b.Navigation("Tasks");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("App.NET.Models.Task_table", b =>
