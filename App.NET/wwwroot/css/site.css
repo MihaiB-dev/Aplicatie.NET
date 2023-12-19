@@ -66,3 +66,26 @@ body {
     color: rgb(224, 171, 102);
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.left {
+    width: 450px;
+    border: 15px rgba(173, 216, 230, 0.4);
+    border-radius: 15px;
+    background-color: rgba(173, 216, 230, 0.4);
+    padding: 50px;
+    margin: 20px;
+}
+
+.right {
+    width: 450px;
+    border: 15px rgba(173, 216, 230, 0.4);
+    border-radius: 15px;
+    background-color: rgba(173, 216, 230, 0.4);
+    padding: 50px;
+    margin: 20px;
+}
+
