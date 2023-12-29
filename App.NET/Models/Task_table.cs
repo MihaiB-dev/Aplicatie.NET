@@ -6,11 +6,24 @@ namespace App.NET.Models
     {
         [Key]
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Titlul este obligatoriu.")]
         public string Title_task { get; set; }
-        public string? Description_task { get; set; }
-        public int? Status { get; set; }
-        public DateTime? Data_start { get; set; }
-        public DateTime? Data_end { get; set; }
+
+        [Required(ErrorMessage = "Descrierea este obligatorie.")]
+        public string Description_task { get; set; }
+
+        [Required(ErrorMessage = "Statusul este obligatoriu.")]
+        public int Status { get; set; }
+
+        [Required(ErrorMessage = "Data de start este obligatorie.")]
+        public DateTime Data_start { get; set; }
+
+        [Required(ErrorMessage = "Data de finalizare este obligatorie.")]
+        public DateTime Data_end { get; set; }
+
+        public string Media { get; set; }
+
         public int? Project_id { get; set; }
         public virtual Project? Project { get; set; }
         // conectare many to many

@@ -48,8 +48,15 @@ namespace App.NET.Models
                     Id = "2c5e174e-3b0e-446f-86af-483d56fd7212",
                     Name = "User",
                     NormalizedName = "User".ToUpper()
-                }
-
+                },
+                 
+                // am adaugat rolul de organizator
+                 new IdentityRole
+                 {
+                     Id = "2c5e174e-3b0e-446f-86af-483d56fd7213",
+                     Name = "Organizator",
+                     NormalizedName = "Organizator".ToUpper()
+                 }
 
                 );
                 // o noua instanta pe care o vom utiliza pentru
@@ -97,6 +104,8 @@ namespace App.NET.Models
                     NormalizedUserName = "USER@TEST.COM",
                     PasswordHash = hasher.HashPassword(null, "User1!")
                 }
+
+
                 );// de la AddRange
 
                 // ASOCIEREA USER-ROLE
@@ -122,7 +131,16 @@ namespace App.NET.Models
 
                     RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
                     UserId = "8e445865-a24d-4543-a6c6-9443d048cdb2"
+                },
+
+                // am adaugat organizatorul
+                new IdentityUserRole<string>
+                {
+                    RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7213",
+                    UserId = "8e445865-a24d-4543-a6c6-9443d048cdbX" // ID-ul utilizatorului "Organizator"
                 }
+
+
                 );
                 context.SaveChanges();
             }
