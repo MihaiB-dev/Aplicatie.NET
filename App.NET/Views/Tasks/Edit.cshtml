@@ -1,26 +1,57 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model App.NET.Models.Task_table
 
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-@model App.NET.Models.Task_table
-
-<h2>Edit Task</h2>
-
-<form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="Project_id" />
 
     <div class="form-group">
-        <label asp-for="Title_task"></label>
+        <label asp-for="Title_task" class="control-label"></label>
         <input asp-for="Title_task" class="form-control" />
         <span asp-validation-for="Title_task" class="text-danger"></span>
     </div>
 
-    <!-- Alte câmpuri pentru descriere, status, data start, data finalizare, media -->
+    <div class="form-group">
+        <label asp-for="Description_task" class="control-label"></label>
+        <input asp-for="Description_task" class="form-control" />
+        <span asp-validation-for="Description_task" class="text-danger"></span>
+    </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <select asp-for="Status" class="form-control">
+            <option value="NotStarted">Not Started</option>
+            <option value="InProgress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Data_start" class="control-label"></label>
+        <input asp-for="Data_start" class="form-control" />
+        <span asp-validation-for="Data_start" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Data_end" class="control-label"></label>
+        <input asp-for="Data_end" class="form-control" />
+        <span asp-validation-for="Data_end" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Media" class="control-label"></label>
+        <input asp-for="Media" class="form-control" />
+        <span asp-validation-for="Media" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Project_id" class="control-label"></label>
+        <input asp-for="Project_id" class="form-control" />
+        <span asp-validation-for="Project_id" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
 </form>
-

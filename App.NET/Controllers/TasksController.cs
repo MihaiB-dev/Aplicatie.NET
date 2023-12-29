@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using TaskStatus = App.NET.Models.TaskStatus; // Pentru a nu se confunda cu System.Threading.Tasks.Task
 
 namespace App.NET.Controllers
 {
@@ -39,6 +40,8 @@ namespace App.NET.Controllers
             if (ModelState.IsValid)
             {
                 task.Project_id = projectId;
+                task.Status = TaskStatus.NotStarted; // Setează statusul implicit
+
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
 

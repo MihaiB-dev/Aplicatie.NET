@@ -2,6 +2,16 @@
 
 namespace App.NET.Models
 {
+
+    public enum TaskStatus
+    {
+        NotStarted,
+        InProgress,
+        Completed
+    }
+
+
+
     public class Task_table
     {
         [Key]
@@ -14,7 +24,7 @@ namespace App.NET.Models
         public string Description_task { get; set; }
 
         [Required(ErrorMessage = "Statusul este obligatoriu.")]
-        public int Status { get; set; }
+        public TaskStatus Status { get; set; }
 
         [Required(ErrorMessage = "Data de start este obligatorie.")]
         public DateTime Data_start { get; set; }

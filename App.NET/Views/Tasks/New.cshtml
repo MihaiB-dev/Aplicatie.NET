@@ -6,6 +6,15 @@
 
 @model App.NET.Models.Task_table
 
+<div class="form-group">
+    <label for="status">Status:</label>
+    <select class="form-control" id="status" name="Status" asp-for="Status">
+        <option value="NotStarted">Not Started</option>
+        <option value="InProgress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+</div>
+
 <h2>Create Task</h2>
 
 <form asp-action="Create" method="post">
