@@ -1,8 +1,43 @@
-﻿@model List<Team>
+﻿@*@model List<Team>*@
 
-<h2>Team Index</h2>
+<div class="d-flex" id="wrapper">
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">Your teams</div>
+        <div class="list-group list-group-flush overflow-auto h-100">
+            @*all of his teams*@
+            
+            @if(ViewBag.your_teams == null)
+            {
+                <a asp-action="New" class="list-group-item list-group-item-action bg-light">Nu sunteti intr-o echipa momentan, creati una</a>
+            }
+            else
+            {
+                <a href="Teams/New" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
+                    <span class="material-symbols-outlined">add</span> 
+                    <span style="padding-left:0.5rem;">New</span>
+                </a>
+                @foreach (var team in ViewBag.your_teams)
+                {
+                    <a href="Teams/Show/@team.Id" class="list-group-item list-group-item-action bg-light">@team.Name</a>
+                }
+            }
+            
+        </div>
+    </div>
+    <div class="team-buttons">
+        <a href="/Teams/Your_Teams"><button type="button" class="btn btn-info" id="your_teams_btn">Your Teams</button></a>
+        <a href="/Teams/New"><button type="button" class="btn btn-info" id="your_teams_btn">Create a team</button></a>
+    </div>
+    
+    <div class="index-content">
 
-<table class="table">
+        <h1>All the teams</h1>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,40,0,0" />
+
+    </div>
+</div>
+
+@*<table class="table">
     <thead>
         <tr>
             <th>ID</th>
@@ -25,5 +60,4 @@
         }
     </tbody>
 </table>
-
-<a asp-action="New">Create New</a>
+*@

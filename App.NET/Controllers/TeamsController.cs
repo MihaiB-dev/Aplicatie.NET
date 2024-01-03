@@ -29,15 +29,23 @@ namespace App.NET.Controllers
 
         public IActionResult Index()
         {
-            var teams = _db.Teams.OrderBy(team => team.Id).ToList();
-            ViewBag.Teams = teams;
-            var userName = HttpContext.User.Identity.Name;
-            ViewBag.UserName = userName;
+            //preluam toate echipele din care face parte userul respectiv.
+            var local_user = _userManager.GetUserId(User);
+            
+            var your_teams = _db.Teams.Where(team => team.Team_member.Any(j => j.User_id == local_user));
+            ViewBag.your_teams = your_teams;
+            
+            //preluam toate echipele existente in care nu este userul nostru
+            var teams = _db.Teams.Where(Team => Team.Team_member.Any(j => j.User_id != local_user));
 
             return View(teams); // Asigură-te că transmiți lista de echipe la View
         }
 
-
+        public IActionResult Your_Teams()
+        {
+            //aici facem lista de la userul curent cu toate echipele in care face parte.
+            return View();
+        }
         public IActionResult Show(int id)
         {
             Team team = _db.Teams.Find(id);

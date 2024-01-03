@@ -66,7 +66,7 @@ body {
     color: rgb(224, 171, 102);
 }
 
-.container {
+.container1 {
     display: flex;
     justify-content: center;
 }
@@ -87,5 +87,69 @@ body {
     background-color: rgba(173, 216, 230, 0.4);
     padding: 50px;
     margin: 20px;
+}
+/*container pentru pagina index din Teams si Show */
+.container:has(#wrapper){
+    margin-left:0rem;
+    margin-right:0rem;
+    height:100%;
+}
+#wrapper{
+    height:100%;
+}
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+/*culoare cand se schimba sidebar la hover*/
+.list-group-item-action:hover{
+    background-color:antiquewhite!important;
+}
+/*daca se apasa pe un team, acesta va fi activ, pentru a arata la ce show este*/
+.list-group-item.active {
+    z-index: 2!important;
+    color: #000000!important;
+    background-color: rgb(224, 171, 102)!important;
+    border-color: rgb(238, 178, 100)!important;
+}
+/*vor aparea daca userul va fi pe telefon*/
+.team-buttons{
+    display:flex;
+    justify-content:center;
+}
+.team-buttons a{
+    margin:0.6rem;
+}
+a:link{
+    text-decoration:none;
+}
+
+/*desktop*/
+@media (min-width:760px) {
+    #sidebar-wrapper {
+        display:block;
+    }
+    #your_teams_btn{
+        display:none;
+    }
+}
+
+/*phone*/
+@media (max-width:759px){
+    #wrapper{
+        display:block!important;
+    }
+
+    #sidebar-wrapper {
+        display:none;
+    }
+    #your_teams_btn{
+        display:block;
+    }
 }
 

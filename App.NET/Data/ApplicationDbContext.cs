@@ -63,8 +63,8 @@ namespace App.NET.Data
         }
 
         // facem CRUD pentru team, team-member si user
-        public DbSet<App.NET.Models.Team> Team { get; set; }
-        public DbSet<App.NET.Models.Team_member> Team_member { get; set; }
+        //public DbSet<App.NET.Models.Team> Team { get; set; }
+        //public DbSet<App.NET.Models.Team_member> Team_member { get; set; }
         public DbSet<App.NET.Models.User_task> User_task { get; set;}
 
 

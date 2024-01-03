@@ -1,4 +1,6 @@
-﻿using App.NET.Models;
+﻿using App.NET.Data;
+using App.NET.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,13 +10,20 @@ namespace App.NET.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        public HomeController(ILogger<HomeController> logger, SignInManager<ApplicationUser> signInManager)
         {
             _logger = logger;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
-        {
+        {   
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Teams", new { area = "" });
+            }
             return View();
         }
 

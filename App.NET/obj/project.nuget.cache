@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IgiF/dtqVFgALAM9IdvPtRw98MLDiACUAXvHxwWdCfWnLl08k77xB1lmHD1UZYP049bULGKB18V0VP4E+z2HcQ==",
+  "dgSpecHash": "Nj+qYxxiXU7c5rqyEsh3xe6qpYj/FiMvAvrnj0pOl3Q9ZNhToNOrwm7nBWhJ3qW2MqR7yAW+4Je1+Y8ks6/dzA==",
   "success": true,
-  "projectFilePath": "D:\\Aplicatie.NET\\Aplicatie.NET\\App.NET\\App.NET.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App.NET\\App.NET\\App.NET.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
