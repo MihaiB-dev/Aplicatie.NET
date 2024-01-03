@@ -1,5 +1,6 @@
 ﻿using App.NET.Data;
 using App.NET.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ namespace App.NET.Controllers
         public IActionResult Your_Teams()
         {
             //aici facem lista de la userul curent cu toate echipele in care face parte.
+
             return View();
         }
         public IActionResult Show(int id)
@@ -73,28 +75,20 @@ namespace App.NET.Controllers
         [HttpPost]
         public IActionResult New(Team team)
         {
-            try
-            {
-                _db.Teams.Add(team);
-                var userName = HttpContext.User.Identity.Name;
-                ApplicationUser user = _db.ApplicationUsers.SingleOrDefault(u => u.UserName == userName);
 
-                if (user != null)
+                _db.Teams.Add(team);
+                var local_user = _userManager.GetUserId(User);
+                _db.SaveChanges();
+                
+                _db.Team_members.Add(new Team_member
                 {
-                    _db.Team_members.Add(new Team_member
-                    {
-                        Team_id = team.Id,
-                        User_id = user.Id
-                    });
-                }
+                    Team_id = team.Id,
+                    User_id = local_user
+                });
 
                 _db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch (Exception)
-            {
-                return View();
-            }
+           
         }
 
         public IActionResult Edit(int id)

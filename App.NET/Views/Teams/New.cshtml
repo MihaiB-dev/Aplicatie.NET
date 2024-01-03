@@ -1,12 +1,21 @@
 ﻿@model Team
 
 <h2>Create Team</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="post" action="/Teams/New">
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <!--<span asp-validation-for="Name" class="text-danger"></span>-->
 
-<form asp-action="New">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <!--<span asp-validation-for="Password" class="text-danger"></span>-->
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+</div>

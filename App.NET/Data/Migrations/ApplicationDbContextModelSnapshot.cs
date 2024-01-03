@@ -269,7 +269,7 @@ namespace App.NET.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Team");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("App.NET.Models.Team_member", b =>
@@ -280,14 +280,11 @@ namespace App.NET.Data.Migrations
                     b.Property<int>("Team_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("User_id", "Team_id");
 
                     b.HasIndex("Team_id");
 
-                    b.ToTable("Team_member");
+                    b.ToTable("Team_members");
                 });
 
             modelBuilder.Entity("App.NET.Models.User_task", b =>

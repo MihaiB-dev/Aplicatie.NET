@@ -153,3 +153,16 @@ a:link{
     }
 }
 
+/*form css*/
+@media (min-width:759px){
+    input:has(.form-group){
+        width:40%!important;
+    }
+}
+.form-control{
+    margin-top:0.5rem;
+    margin-bottom:0.2rem;
+}
+label{
+    margin-top:0.6rem;
+}
