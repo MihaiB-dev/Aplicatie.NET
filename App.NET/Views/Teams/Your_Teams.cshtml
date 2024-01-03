@@ -6,3 +6,18 @@
 
 @*aici ii zicem sa aleaga din echipele din care face parte, in care sa se duca. Valabil doar pe telefon*@
 @*Dam o lista(*) si un buton de search (optional)(daca avem timp)*@
+<h1>All your teams</h1>
+<div class="items-container">
+    @foreach (App.NET.Models.Team team in ViewBag.teams)
+    {
+
+        <div onclick="location.href='/Teams/Show/@team.Id';" class="card team-card">
+
+            <div class="card-body">
+
+                <h3 class="card-title alert-success py-3 px-3 rounded-2">@team.Name</h3>
+            </div>
+        </div>
+
+    }
+</div>

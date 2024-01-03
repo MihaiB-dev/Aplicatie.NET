@@ -100,8 +100,10 @@ namespace App.NET.Controllers
         }
         public IActionResult Your_Teams()
         {
+            var local_user = _userManager.GetUserId(User);
             //aici facem lista de la userul curent cu toate echipele in care face parte.
-
+            var your_teams = _db.Teams.Where(team => team.Team_member.Any(j => j.User_id == local_user));
+            ViewBag.teams = your_teams;
             return View();
         }
         public IActionResult Show(int id)
