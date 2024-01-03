@@ -93,6 +93,40 @@ body {
     margin-left:0rem;
     margin-right:0rem;
     height:100%;
+    max-width:100%;
+}
+.index-content {
+    flex: 1;
+    
+}
+.items-container {
+    display: grid;
+    align-items: center;
+    
+    grid-template-columns: repeat(4, 1fr);
+    column-gap:5rem;
+    row-gap:2rem;
+    margin-bottom:2rem;
+}
+@media (max-width:1600px){
+    .items-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width:1200px) {
+    .items-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width:900px) {
+    .items-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+.team-card:hover{
+    filter:brightness(85%);
+    transition: .2s;
+    cursor:pointer;
 }
 #wrapper{
     height:100%;

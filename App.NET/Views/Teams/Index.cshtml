@@ -8,17 +8,17 @@
             
             @if(ViewBag.your_teams == null)
             {
-                <a asp-action="New" class="list-group-item list-group-item-action bg-light">Nu sunteti intr-o echipa momentan, creati una</a>
+                <a href="/Teams/New" class="list-group-item list-group-item-action bg-light">Nu sunteti intr-o echipa momentan, creati una</a>
             }
             else
             {
-                <a href="Teams/New" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
+                <a href="/Teams/New" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
                     <span class="material-symbols-outlined">add</span> 
                     <span style="padding-left:0.5rem;">New</span>
                 </a>
                 @foreach (var team in ViewBag.your_teams)
                 {
-                    <a href="Teams/Show/@team.Id" class="list-group-item list-group-item-action bg-light">@team.Name</a>
+                    <a href="/Teams/Show/@team.Id" class="list-group-item list-group-item-action bg-light">@team.Name</a>
                 }
             }
             
@@ -32,8 +32,55 @@
     <div class="index-content">
 
         <h1>All the teams</h1>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,40,0,0" />
+        <div class="items-container">
+        @foreach (App.NET.Models.Team team in ViewBag.teams)
+        {
 
+                <div onclick="location.href='/Teams/Auth/@team.Id';" class="card team-card">
+
+                    <div class="card-body">
+
+                        <h3 class="card-title alert-success py-3 px-3 rounded-2">@team.Name</h3>
+
+                        <div class="card-text">Creator: @ViewBag.creator[team.Id]</div>
+
+                    
+                        <div class="card-text">
+                            Number of people: @ViewBag.count[team.Id]
+                        </div>
+                    </div>
+                </div>
+            
+        }
+        </div>
+
+        @* Afisarea paginata a articolelor *@
+        <div style="display:flex; justify-content:center;">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/Teams/Index?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= ViewBag.lastPage; i++) @* aici se afla ViewBag.lastPage din controller*@
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="/Teams/Index?page=@i">@(i)</a>
+                        </li>
+                    }
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/Teams/Index?page=@(ViewBag.lastPage)" arialabel="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 

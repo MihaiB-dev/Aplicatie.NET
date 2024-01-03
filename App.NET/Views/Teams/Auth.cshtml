@@ -1,0 +1,16 @@
+﻿
+<h2>Join the Team : @ViewBag.team.Name</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="post" action="/Teams/Auth/@ViewBag.team.Id">
+                <div class="form-group">
+                    <label >Password</label>
+                    <input name="Password" type="password" class="form-control" />
+                    <!--<span asp-validation-for="Password" class="text-danger"></span>-->
+                </div>
+                <button type="submit" class="btn btn-primary">Join Team</button>
+            </form>
+        </div>
+    </div>
+</div>

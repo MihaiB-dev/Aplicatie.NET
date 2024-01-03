@@ -27,7 +27,7 @@ namespace App.NET.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
+        
         public IActionResult Index()
         {
             //preluam toate echipele din care face parte userul respectiv.
@@ -37,11 +37,67 @@ namespace App.NET.Controllers
             ViewBag.your_teams = your_teams;
             
             //preluam toate echipele existente in care nu este userul nostru
-            var teams = _db.Teams.Where(Team => Team.Team_member.Any(j => j.User_id != local_user));
+            var teams = _db.Teams.Where(Team => Team.Team_member.All(j => j.User_id != local_user));
 
-            return View(teams); // Asigură-te că transmiți lista de echipe la View
+            var count = new Dictionary<int, int>(); 
+            var creators = new Dictionary<int, string>();
+            foreach(var team in teams)
+            {
+                var calculate_counter = _db.Team_members.Where(tm => tm.Team_id == team.Id).Count();
+                var calculate_creator = "default";
+                creators.Add(team.Id, calculate_creator);
+                count.Add(team.Id, calculate_counter);
+            }
+            ViewBag.creator = creators;
+            ViewBag.count = count;
+
+
+            //paginare
+            int _perPage = 4;
+            int totalItems = teams.Count();
+
+            var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
+
+            var offset = 0; //cate pagini s-au afisat deja, depinde de _perPage
+
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * _perPage;
+            }
+
+            var paginateTeams = teams.Skip(offset).Take(_perPage);
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)_perPage);
+            ViewBag.teams = paginateTeams;
+            return View(); // Asigură-te că transmiți lista de echipe la View
         }
-
+        public IActionResult Auth(int id)
+        {
+            var team = _db.Teams.Where(team => team.Id == id).First();
+            ViewBag.team = team;
+            return View();
+        }
+        //folosit cand userul incearca sa intre intr-o echipa
+        [HttpPost]
+        public IActionResult Auth(int id, string password)
+        {
+            var team = _db.Teams.Where(team => team.Id == id).First();
+            if(password == team.Password)
+            {
+                var local_user = _userManager.GetUserId(User);
+                _db.Team_members.Add(new Team_member
+                {
+                    Team_id = team.Id,
+                    User_id = local_user
+                });
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View();
+            }
+        }
         public IActionResult Your_Teams()
         {
             //aici facem lista de la userul curent cu toate echipele in care face parte.
@@ -75,9 +131,9 @@ namespace App.NET.Controllers
         [HttpPost]
         public IActionResult New(Team team)
         {
-
-                _db.Teams.Add(team);
                 var local_user = _userManager.GetUserId(User);
+                
+                _db.Teams.Add(team);
                 _db.SaveChanges();
                 
                 _db.Team_members.Add(new Team_member
