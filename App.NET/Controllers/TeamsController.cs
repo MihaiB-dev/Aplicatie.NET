@@ -108,6 +108,11 @@ namespace App.NET.Controllers
         }
         public IActionResult Show(int id)
         {
+            var local_user = _userManager.GetUserId(User);
+
+            var your_teams = _db.Teams.Where(team => team.Team_member.Any(j => j.User_id == local_user));
+            ViewBag.your_teams = your_teams;
+
             Team team = _db.Teams.Find(id);
 
             if (team == null)
@@ -115,12 +120,13 @@ namespace App.NET.Controllers
                 return NotFound();
             }
 
-            ICollection<Team_member> teamMembers = _db.Team_members.Include(tm => tm.User)
-                                                                   .Where(tm => tm.Team_id == id)
-                                                                   .ToList();
+            
+            //ICollection<Team_member> teamMembers = _db.Team_members.Include(tm => tm.User)
+                                                                   //.Where(tm => tm.Team_id == id)
+                                                                   //.ToList();
 
             ViewBag.Team = team;
-            ViewBag.TeamMembers = teamMembers;
+            //ViewBag.TeamMembers = teamMembers;
 
             return View(team);
         }

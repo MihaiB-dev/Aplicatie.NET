@@ -1,18 +1,73 @@
 ﻿@model Team
 
-<h2>Team Details</h2>
+<div class="d-flex" id="wrapper">
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">Your teams</div>
+        <div class="list-group list-group-flush overflow-auto h-100">
+            @*all of his teams*@
 
-<div>
-    <h4>Team</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">ID</dt>
-        <dd class="col-sm-10">@Model.Id</dd>
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@Model.Name</dd>
-    </dl>
+            @if (ViewBag.your_teams == null)
+            {
+                <a href="/Teams/New" class="list-group-item list-group-item-action bg-light">You are not yet in a team, create one</a>
+            }
+            else
+            {
+                <a href="/Teams/Index" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+                    <span style="padding-left:0.5rem;">All teams</span>
+                </a>
+                <a href="/Teams/New" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
+                    <span class="material-symbols-outlined">add</span>
+                    <span style="padding-left:0.5rem;">New</span>
+                </a>
+                @foreach (var team in ViewBag.your_teams)
+                {
+                    @if(team.Id == Model.Id)
+                    { 
+                        <a href="/Teams/Show/@team.Id" class="list-group-item list-group-item-action bg-light active">@team.Name</a>
+                    }
+                    else
+                    {
+                        <a href="/Teams/Show/@team.Id" class="list-group-item list-group-item-action bg-light ">@team.Name</a>
+                    }
+                }
+            }
+
+        </div>
+    </div>
+    <div class="team-buttons">
+        <a href="/Teams/Your_Teams"><button type="button" class="btn btn-info">Your Teams</button></a>
+        <a href="/Teams/New"><button type="button" class="btn btn-info">Create a team</button></a>
+        <a href="/Projects/New"><button type="button" class="btn btn-info your_teams_btn">Create a Project</button></a>
+        <a href="#"><button type="button" class="btn btn-info">Leaderboard</button></a>
+    </div>
+    
+    <div class="index-content">
+        <div class="nav_teams_show">
+            <div class="nav_show">
+                <ul>
+                    <li><a href="/Projects/New">Create Project</a></li>
+                    <li><a href="#">LeaderBoard</a></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <h4 class="team_title">Team</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">ID</dt>
+                <dd class="col-sm-10">@Model.Id</dd>
+                <dt class="col-sm-2">Name</dt>
+                <dd class="col-sm-10">@Model.Name</dd>
+            </dl>
+        </div>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </p>
+    </div>
 </div>
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</p>
+
+

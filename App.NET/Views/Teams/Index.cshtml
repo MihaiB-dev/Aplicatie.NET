@@ -8,10 +8,16 @@
             
             @if(ViewBag.your_teams == null)
             {
-                <a href="/Teams/New" class="list-group-item list-group-item-action bg-light">Nu sunteti intr-o echipa momentan, creati una</a>
+                <a href="/Teams/New" class="list-group-item list-group-item-action bg-light">You are not yet in a team, create one</a>
             }
             else
             {
+                <a href="/Teams/Index" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+                    <span style="padding-left:0.5rem;">All teams</span>
+                </a>
                 <a href="/Teams/New" class="list-group-item list-group-item-action  bg-light" style="display:flex;align-content:center;">
                     <span class="material-symbols-outlined">add</span> 
                     <span style="padding-left:0.5rem;">New</span>
