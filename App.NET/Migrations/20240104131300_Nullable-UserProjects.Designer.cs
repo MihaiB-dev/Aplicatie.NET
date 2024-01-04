@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace App.NET.Data.Migrations
+namespace App.NET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231230195150_team")]
-    partial class team
+    [Migration("20240104131300_Nullable-UserProjects")]
+    partial class NullableUserProjects
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -271,7 +271,7 @@ namespace App.NET.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Team");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("App.NET.Models.Team_member", b =>
@@ -282,14 +282,11 @@ namespace App.NET.Data.Migrations
                     b.Property<int>("Team_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("User_id", "Team_id");
 
                     b.HasIndex("Team_id");
 
-                    b.ToTable("Team_member");
+                    b.ToTable("Team_members");
                 });
 
             modelBuilder.Entity("App.NET.Models.User_task", b =>
@@ -311,6 +308,21 @@ namespace App.NET.Data.Migrations
                     b.HasIndex("Task_id");
 
                     b.ToTable("User_task");
+                });
+
+            modelBuilder.Entity("App.NET.Models.UserProject", b =>
+                {
+                    b.Property<string>("User_id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Project_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("User_id", "Project_id");
+
+                    b.HasIndex("Project_id");
+
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -549,6 +561,25 @@ namespace App.NET.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("App.NET.Models.UserProject", b =>
+                {
+                    b.HasOne("App.NET.Models.Project", "Project")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("Project_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.NET.Models.ApplicationUser", "User")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -608,12 +639,16 @@ namespace App.NET.Data.Migrations
 
                     b.Navigation("Team_member");
 
+                    b.Navigation("UserProjects");
+
                     b.Navigation("User_task");
                 });
 
             modelBuilder.Entity("App.NET.Models.Project", b =>
                 {
                     b.Navigation("Tasks");
+
+                    b.Navigation("UserProjects");
                 });
 
             modelBuilder.Entity("App.NET.Models.Task_table", b =>

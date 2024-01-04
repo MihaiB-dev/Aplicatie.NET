@@ -30,7 +30,7 @@ namespace App.NET.Controllers
         public IActionResult Index(int id)
         {
 
-            var projects = db.Projects.Where(p => p.TeamId == id);
+            var projects = db.Projects.Where(p => p.Team_Id == id);
             ViewBag.team_id = id;
             // ViewBag.Projects = projects;
 
@@ -39,7 +39,7 @@ namespace App.NET.Controllers
 
         public IActionResult Show(int id)
         {
-            var project =  db.Projects.Include("Task").Where(p => p.Id == id);
+            var project =  db.Projects.Include("Tasks").Where(p => p.Id == id).First();
                           
             if (project == null)
             {
@@ -48,14 +48,37 @@ namespace App.NET.Controllers
 
             return View(project);
         }
+        //trb sa verificam daca acest user este creatorul proiectului
+        public IActionResult Add_Users(int id)//id-ul reprezinta id-ul proiectului la care adaugam useri
+        {
+            var project = db.Projects.Find(id);
+            if(project.Users_Id != _userManager.GetUserId(User))
+            {
+                //return a TempData aswell (TODO)
 
+                return RedirectToAction("Show", "Projects", new { id =id });
+            }
+            //luam toti utilizatorii care se afla in echipa si care nu se afla deja in proiect;
+            var users = db.Users.Where(user => user.Team_member.Any(j => j.Team_id == project.Team_Id) && user.UserProjects.All(j=> j.Project_id != project.Id));
+            if(users.Count() == 0) { ViewBag.none =  true; }
+            ViewBag.project_id = id;
+            return View(users);
+        }
+
+        [HttpPost]
+        public IActionResult Add_Users(UserProject userproject)
+        {
+            db.UserProjects.Add(userproject);
+            db.SaveChanges();
+            return RedirectToAction("Add_Users", new {id = userproject.Project_id});
+        }
         public IActionResult New()
         {
-            // ViewBag.Teams = new SelectList(db.Teams, "Id", "Name");
-
-            Project newProject = new Project();
-            
-            return View(newProject);
+            var team_id = Convert.ToInt32(HttpContext.Request.Query["team"]);
+            ViewBag.team = db.Teams.Find(team_id);
+            //Project newProject = new Project();
+            //newProject
+            return View();
         }
 
 
@@ -64,26 +87,27 @@ namespace App.NET.Controllers
         //team se ia din link, project se ia din post
         public IActionResult New(Project project)
         {
-            try
+            if(ModelState.IsValid)
             {
                 //TODO trebuie sa verficam daca persoana se afla in echipa respectiva
 
-                //preiua id-ul de la echipa din care a apasat click. Il ia din view->show de la project (link)
-                project.TeamId =  Convert.ToInt32(HttpContext.Request.Query["team"]);
-
-                // project.Tasks = new List<Task_table>();
-
-                project.UsersId = _userManager.GetUserId(User);
-
+                project.Users_Id = _userManager.GetUserId(User);
                 db.Projects.Add(project);
                 db.SaveChanges();
 
+                db.UserProjects.Add(new UserProject
+                {
+                    User_id = _userManager.GetUserId(User),
+                    Project_id = project.Id
+                });
+                db.SaveChanges();
+
                 TempData["message"] = "Proiectul a fost adăugat!";
-                return RedirectToAction("Index", new { id = project.TeamId});
+                return RedirectToAction("Show", "Teams",new { id = project.Team_Id });
             }
-            catch (Exception ex)
+            else
             {
-                TempData["error"] = $"Eroare la adăugarea proiectului: {ex.Message}";
+                TempData["error"] = $"Eroare la adăugarea proiectului: ";
                 return RedirectToAction("New");
             }
         }

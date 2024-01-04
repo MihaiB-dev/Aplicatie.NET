@@ -26,8 +26,8 @@
 
                 <br />
 
-                @Html.LabelFor(model => model.TeamId)
-                @Html.DropDownListFor(model => model.TeamId, new SelectList(ViewBag.Teams, "Id", "Name", Model.TeamId), "Selectați echipa", new { @class = "form-control" })
+                @Html.LabelFor(model => model.Team_Id)
+                @Html.DropDownListFor(model => model.Team_Id, new SelectList(ViewBag.Teams, "Id", "Name", Model.Team_Id), "Selectați echipa", new { @class = "form-control" })
 
                 <button type="submit" class="btn btn-success mt-3">Modifică Proiect</button>
             }

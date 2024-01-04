@@ -206,9 +206,7 @@ a:link{
 label{
     margin-top:0.6rem;
 }
-.team_title{
-    margin-top:1rem;
-}
+
 /*navbar for teams show*/
 .nav_teams_show{
     width:100%;
@@ -253,4 +251,20 @@ label{
 }
 .nav_show ul li:hover a{
     color:rgb(238, 178, 100);
+}
+/*Show team*/
+
+.team_title {
+    margin-top: 1rem;
+    text-align:center;
+}
+
+.add_users, .add_users p {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px 0;
+}
+.button_add_user {
+    position:relative;
+    right:0px;
 }

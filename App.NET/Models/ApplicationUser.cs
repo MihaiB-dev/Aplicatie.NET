@@ -16,7 +16,10 @@ namespace App.NET.Models
         // legatura cu comentarii
         public virtual ICollection<Comment>? Comments { get; set; }
 
-        //legatura cu proiecte
+        //legatura cu proiecte (daca este organizator)
         public virtual ICollection<Project>? Projects { get; set; }
+
+        //legatura cu proiecte (daca face parte dintr-un proiect)
+        public virtual ICollection<UserProject>? UserProjects { get; set; }
     }
 }

@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace App.NET.Data.Migrations
+namespace App.NET.Migrations
 {
-    public partial class idk : Migration
+    public partial class nullable_tasks : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

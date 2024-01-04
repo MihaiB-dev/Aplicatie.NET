@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace App.NET.Data.Migrations
+namespace App.NET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231208135527_nimic")]
-    partial class nimic
+    [Migration("20240104121808_add-many-to-many-userProjects")]
+    partial class addmanytomanyuserProjects
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -66,9 +66,6 @@ namespace App.NET.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -91,8 +88,6 @@ namespace App.NET.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -130,13 +125,10 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Id_task")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Id_user")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TaskId")
+                    b.Property<int>("TaskId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -144,10 +136,8 @@ namespace App.NET.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -166,29 +156,24 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("TeamId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Team_id")
+                    b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title_project")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("User_id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TeamId");
+
+                    b.HasIndex("UsersId");
 
                     b.ToTable("Projects");
                 });
@@ -234,13 +219,18 @@ namespace App.NET.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("Data_end")
+                    b.Property<DateTime>("Data_end")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("Data_start")
+                    b.Property<DateTime>("Data_start")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description_task")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Media")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProjectId")
@@ -249,7 +239,7 @@ namespace App.NET.Data.Migrations
                     b.Property<int?>("Project_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Title_task")
@@ -281,7 +271,7 @@ namespace App.NET.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Team");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("App.NET.Models.Team_member", b =>
@@ -292,14 +282,11 @@ namespace App.NET.Data.Migrations
                     b.Property<int>("Team_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("User_id", "Team_id");
 
                     b.HasIndex("Team_id");
 
-                    b.ToTable("Team_member");
+                    b.ToTable("Team_members");
                 });
 
             modelBuilder.Entity("App.NET.Models.User_task", b =>
@@ -321,6 +308,21 @@ namespace App.NET.Data.Migrations
                     b.HasIndex("Task_id");
 
                     b.ToTable("User_task");
+                });
+
+            modelBuilder.Entity("App.NET.Models.UserProject", b =>
+                {
+                    b.Property<string>("User_id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Project_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("User_id", "Project_id");
+
+                    b.HasIndex("Project_id");
+
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -460,13 +462,6 @@ namespace App.NET.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("App.NET.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("App.NET.Models.Project", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("App.NET.Models.Badge", b =>
                 {
                     b.HasOne("App.NET.Models.Score", "Score")
@@ -480,11 +475,15 @@ namespace App.NET.Data.Migrations
                 {
                     b.HasOne("App.NET.Models.Task_table", "Task")
                         .WithMany()
-                        .HasForeignKey("TaskId");
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.NET.Models.ApplicationUser", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Task");
 
@@ -497,7 +496,13 @@ namespace App.NET.Data.Migrations
                         .WithMany()
                         .HasForeignKey("TeamId");
 
+                    b.HasOne("App.NET.Models.ApplicationUser", "Users")
+                        .WithMany("Projects")
+                        .HasForeignKey("UsersId");
+
                     b.Navigation("Team");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("App.NET.Models.Score", b =>
@@ -552,6 +557,25 @@ namespace App.NET.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Task");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("App.NET.Models.UserProject", b =>
+                {
+                    b.HasOne("App.NET.Models.Project", "Project")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("Project_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.NET.Models.ApplicationUser", "User")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -611,7 +635,11 @@ namespace App.NET.Data.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Projects");
+
                     b.Navigation("Team_member");
+
+                    b.Navigation("UserProjects");
 
                     b.Navigation("User_task");
                 });
@@ -620,7 +648,7 @@ namespace App.NET.Data.Migrations
                 {
                     b.Navigation("Tasks");
 
-                    b.Navigation("Users");
+                    b.Navigation("UserProjects");
                 });
 
             modelBuilder.Entity("App.NET.Models.Task_table", b =>

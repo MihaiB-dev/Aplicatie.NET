@@ -160,12 +160,18 @@ namespace App.NET.Migrations
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Team_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title_project")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Users_Id")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -306,6 +312,21 @@ namespace App.NET.Migrations
                     b.HasIndex("Task_id");
 
                     b.ToTable("User_task");
+                });
+
+            modelBuilder.Entity("App.NET.Models.UserProject", b =>
+                {
+                    b.Property<string>("User_id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Project_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("User_id", "Project_id");
+
+                    b.HasIndex("Project_id");
+
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -544,6 +565,25 @@ namespace App.NET.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("App.NET.Models.UserProject", b =>
+                {
+                    b.HasOne("App.NET.Models.Project", "Project")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("Project_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.NET.Models.ApplicationUser", "User")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -603,12 +643,16 @@ namespace App.NET.Migrations
 
                     b.Navigation("Team_member");
 
+                    b.Navigation("UserProjects");
+
                     b.Navigation("User_task");
                 });
 
             modelBuilder.Entity("App.NET.Models.Project", b =>
                 {
                     b.Navigation("Tasks");
+
+                    b.Navigation("UserProjects");
                 });
 
             modelBuilder.Entity("App.NET.Models.Task_table", b =>

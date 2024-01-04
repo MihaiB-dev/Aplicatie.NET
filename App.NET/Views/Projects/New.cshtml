@@ -6,34 +6,25 @@
 
 @model App.NET.Models.Project
 
-<h2 class="text-center">Adaugare Proiect</h2>
+<h2 class="text-center">Adaugare Proiect pentru echipa @ViewBag.team.Name</h2>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            @* @if (ViewBag.Teams != null)
-            {*@
                 @using (Html.BeginForm("New", "Projects", FormMethod.Post))
                 {
-                
-                    @Html.LabelFor(model => model.Title_project)
-                    @Html.TextBoxFor(model => model.Title_project, new { @class = "form-control" })
+                    <input type="hidden" name="Team_Id" value="@ViewContext.HttpContext.Request.Query["team"]"/>
 
-                    @Html.LabelFor(model => model.Description)
-                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    @Html.Label("Title_project")
+                    <input asp-for="Title_project" class="form-control"/>
 
-                    //@Html.LabelFor(model => model.Team_id)
+                    @Html.Label("Description")
+                    <textarea asp-for="Description" class="form-control"></textarea>
 
-                    //@Html.DropDownListFor(model => model.Team_id, (SelectList)ViewBag.Teams, "Selectați echipa", new { @class = "form-control" })
 
                     <button type="submit" class="btn btn-success mt-3">Adaugă Proiect</button>
                 }
-           @* }
-            else
-            {
-                <p>Eroare: ViewBag.Teams este null.</p>
-            }
-            *@
+
         </div>
     </div>
 </div>

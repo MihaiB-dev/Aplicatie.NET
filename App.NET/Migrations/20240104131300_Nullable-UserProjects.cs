@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace App.NET.Data.Migrations
+namespace App.NET.Migrations
 {
-    public partial class StiuCaNuOSaMearga : Migration
+    public partial class NullableUserProjects : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -3,6 +3,7 @@ using App.NET.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Construction;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -120,10 +121,24 @@ namespace App.NET.Controllers
                 return NotFound();
             }
 
-            
+            //integram proiectele care exista in aceasta echipa
+
+            //afisez proiectele care le are userul curent
+            var my_projects = _db.Projects.Where(project => project.Users_Id == local_user && project.Team_Id == id);
+            if (my_projects.Count() != 0) { ViewBag.MyProjects = my_projects; }
+
+            //afisez proiectele din care fac parte
+            var current_projects = _db.Projects.Where(project => project.UserProjects.Any(j => j.User_id == local_user) && project.Users_Id != local_user && project.Team_Id == id);
+            if (current_projects.Count() != 0) { ViewBag.CurrentProjects = current_projects; }
+
+            //afisez proiectele din care userul nu face parte
+            var other_projects = _db.Projects.Where(project => project.UserProjects.All(j => j.User_id != local_user) && project.Team_Id == id);
+            if(other_projects.Count() != 0){ViewBag.OtherProjects = other_projects;}
+
+
             //ICollection<Team_member> teamMembers = _db.Team_members.Include(tm => tm.User)
-                                                                   //.Where(tm => tm.Team_id == id)
-                                                                   //.ToList();
+            //.Where(tm => tm.Team_id == id)
+            //.ToList();
 
             ViewBag.Team = team;
             //ViewBag.TeamMembers = teamMembers;

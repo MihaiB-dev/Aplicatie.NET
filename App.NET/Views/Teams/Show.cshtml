@@ -40,7 +40,7 @@
     <div class="team-buttons">
         <a href="/Teams/Your_Teams"><button type="button" class="btn btn-info">Your Teams</button></a>
         <a href="/Teams/New"><button type="button" class="btn btn-info">Create a team</button></a>
-        <a href="/Projects/New"><button type="button" class="btn btn-info your_teams_btn">Create a Project</button></a>
+        <a href="/Projects/New?team=@Model.Id"><button type="button" class="btn btn-info your_teams_btn">Create a Project</button></a>
         <a href="#"><button type="button" class="btn btn-info">Leaderboard</button></a>
     </div>
     
@@ -48,14 +48,85 @@
         <div class="nav_teams_show">
             <div class="nav_show">
                 <ul>
-                    <li><a href="/Projects/New">Create Project</a></li>
+                    <li><a href="/Projects/New?team=@Model.Id">Create Project</a></li>
                     <li><a href="#">LeaderBoard</a></li>
                 </ul>
             </div>
         </div>
         <div>
-            <h4 class="team_title">Team</h4>
+            <h4 class="team_title">Team: @Model.Name</h4>
             <hr />
+            @if(ViewBag.MyProjects != null)
+            {
+                <h3>My projects</h3>
+                @foreach (var project in ViewBag.MyProjects)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">@project.Title_project</h5>
+                                <p class="card-text">@project.Description</p>
+                                <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
+                                <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
+                                <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">Șterge</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            
+            @if(ViewBag.CurrentProjects != null)
+            {
+                <h3>Current Projects</h3>
+                @foreach (var project in ViewBag.CurrentProjects)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">@project.Title_project</h5>
+                                <p class="card-text">@project.Description</p>
+                                <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
+                                <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
+                                <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">Șterge</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+            }
+
+            @if(ViewBag.OtherProjects != null)
+            {
+                <h3>Other Projects</h3>
+                @foreach (var project in ViewBag.OtherProjects)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">@project.Title_project</h5>
+                                <p class="card-text">@project.Description</p>
+                                <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
+                                <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
+                                <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">Șterge</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+            }
+
+            
+            @if (ViewBag.MyProjects == null && ViewBag.CurrentProjects == null && ViewBag.OtherProjects == null)
+            {
+                <h3>There are no projects yet, be the first to create one</h3> 
+            }
+
             <dl class="row">
                 <dt class="col-sm-2">ID</dt>
                 <dd class="col-sm-10">@Model.Id</dd>
@@ -63,10 +134,12 @@
                 <dd class="col-sm-10">@Model.Name</dd>
             </dl>
         </div>
+        @*
         <p>
             <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
             <a asp-action="Index">Back to List</a>
         </p>
+        *@
     </div>
 </div>
 

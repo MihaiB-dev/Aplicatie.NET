@@ -15,6 +15,8 @@ namespace App.NET.Data
         //aici se adauga toate tabelele create
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Team_member> Team_members { get; set; }
+
+        public DbSet<UserProject> UserProjects { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Score> Scores { get; set; }
 
@@ -48,7 +50,7 @@ namespace App.NET.Data
             // definire primary key compus
             modelBuilder.Entity<User_task>()
                 .HasKey(ac => new { ac.User_id, ac.Task_id });
-            // definire relatii cu modelele Category si Article (FK)
+            // definire relatii cu modelele User si Task (FK)
             modelBuilder.Entity<User_task>()
                 .HasOne(ac => ac.User)
                 .WithMany(ac => ac.User_task)
@@ -58,12 +60,26 @@ namespace App.NET.Data
                 .WithMany(ac => ac.User_task)
                 .HasForeignKey(ac => ac.Task_id);
 
-            
-         
+            //relatie many to many pentru User cu Proiecte
+
+            // definire primary key compus
+            modelBuilder.Entity<UserProject>()
+                .HasKey(ac => new { ac.User_id, ac.Project_id });
+            // definire relatii cu modelele User si Proiecte (FK)
+            modelBuilder.Entity<UserProject>()
+                .HasOne(ac => ac.User)
+                .WithMany(ac => ac.UserProjects)
+                .HasForeignKey(ac => ac.User_id);
+            modelBuilder.Entity<UserProject>()
+                .HasOne(ac => ac.Project)
+                .WithMany(ac => ac.UserProjects)
+                .HasForeignKey(ac => ac.Project_id);
+
+
         }
 
         // facem CRUD pentru team, team-member si user
-        public DbSet<App.NET.Models.User_task> User_task { get; set;}
+        //public DbSet<App.NET.Models.User_task> User_task { get; set;}
 
 
     }
