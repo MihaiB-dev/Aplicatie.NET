@@ -3,6 +3,9 @@
 *@
 @{
 }
+
+@model App.NET.Models.Task_table
+
 <a href="Tasks/Add_users/@Model.Id">
     <button type="button" class="btn btn-success" style="display:flex;align-content:center;">
         <span class="material-symbols-outlined">
@@ -10,5 +13,38 @@
         </span><span>Add users to the Task</span>
     </button>
 
-    <div class="card-text">@Html.Raw(Model.Content)</div>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">ID:</dt>
+            <dd class="col-sm-10">@Model.Id</dd>
+
+            <dt class="col-sm-2">Titlu:</dt>
+            <dd class="col-sm-10">@Model.Title_task</dd>
+
+            <dt class="col-sm-2">Descriere:</dt>
+            <dd class="col-sm-10">@Model.Description_task</dd>
+
+            <dt class="col-sm-2">Status:</dt>
+            <dd class="col-sm-10">@Model.Status</dd>
+
+            <dt class="col-sm-2">Data start:</dt>
+            <dd class="col-sm-10">@Model.Data_start</dd>
+
+            <dt class="col-sm-2">Data finalizare:</dt>
+            <dd class="col-sm-10">@Model.Data_end</dd>
+
+            <dt class="col-sm-2">Media:</dt>
+            <dd class="col-sm-10">@Model.Media</dd>
+
+
+        </dl>
+    </div>
+
+    <a asp-action="Index">Înapoi la listă</a>
+
+    <div class="card-text">@Html.Raw(Model.Media)</div>
 </a>
+
+
+
+

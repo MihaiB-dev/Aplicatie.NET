@@ -18,7 +18,7 @@
 <h2>Create Task</h2>
 
 <form asp-action="New" method="post">
-    <input type="hidden" asp-for="Project_id" />
+    <input type="hidden" asp-for="Project_id" value="@ViewBag.project.Id"/>
 
     <div class="form-group">
         <label asp-for="Title_task"></label>
@@ -52,7 +52,7 @@
 
         <!--Media-->
 
-    @Html.TextArea("Content", null, new { @class = "summernote" })
+    @Html.TextArea("Media", null, new { @class = "summernote" })
 
 
 

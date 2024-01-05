@@ -42,8 +42,9 @@ namespace App.NET.Controllers
         }
 
         [Authorize(Roles = "User,Editor,Admin")]
-        public IActionResult New(int id)
+        public IActionResult New()
         {
+            var id = Convert.ToInt32(HttpContext.Request.Query["project"]);
             Project project = _db.Projects.Find(id);
             if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){
                 ViewBag.Project = project;
@@ -61,7 +62,7 @@ namespace App.NET.Controllers
         }
 
         [HttpPost]
-        public IActionResult New(int id, Task_table task)
+        public IActionResult New(Task_table task)
         {
 
             var sanitizer = new HtmlSanitizer();
@@ -73,25 +74,36 @@ namespace App.NET.Controllers
                 task.Description_task = sanitizer.Sanitize(task.Description_task);
                 task.Media = sanitizer.Sanitize(task.Media);
 
-                task.Project_id = id;
+                
                 task.Status = TaskStatus.NotStarted; // Setează statusul implicit
 
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
 
                 TempData["message"] = "Task-ul a fost adăugat!";
-                return RedirectToAction("Show", "Projects", new { id = id });
+                return RedirectToAction("Show", "Projects", new { id = task.Project_id });
             }
             else
             {
-                Project project = _db.Projects.FirstOrDefault(p => p.Id == id);
+                Project project = _db.Projects.FirstOrDefault(p => p.Id == task.Project_id);
                 ViewBag.Project = project;
                 return View(task);
             }
         }
+
+
         public IActionResult Show(int id)
         {
             var task = _db.Tasks.Find(id);
+
+
+            if(task == null)
+            {
+                return NotFound();
+            }
+
+            
+
             
             return View(task);
         }
@@ -149,6 +161,10 @@ namespace App.NET.Controllers
                 return View(updatedTask);
             }
         }
+
+
+
+
 
         [HttpPost]
         public IActionResult Delete(int id)
