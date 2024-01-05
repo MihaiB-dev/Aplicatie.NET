@@ -268,3 +268,10 @@ label{
     position:relative;
     right:0px;
 }
+
+
+/*Summernote*/
+
+.note-editor .dropdown-toggle::after {
+    display: none;
+}

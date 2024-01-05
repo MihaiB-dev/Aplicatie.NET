@@ -1,5 +1,6 @@
 ﻿using App.NET.Data;
 using App.NET.Models;
+using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -62,8 +63,16 @@ namespace App.NET.Controllers
         [HttpPost]
         public IActionResult New(int id, Task_table task)
         {
+
+            var sanitizer = new HtmlSanitizer();
+
             if (ModelState.IsValid)
             {
+
+                task.Title_task = sanitizer.Sanitize(task.Title_task);
+                task.Description_task = sanitizer.Sanitize(task.Description_task);
+                task.Media = sanitizer.Sanitize(task.Media);
+
                 task.Project_id = id;
                 task.Status = TaskStatus.NotStarted; // Setează statusul implicit
 
@@ -111,9 +120,15 @@ namespace App.NET.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Task_table updatedTask)
         {
+            var sanitizer = new HtmlSanitizer();
+
             if (ModelState.IsValid)
             {
                 Task_table task = _db.Tasks.FirstOrDefault(t => t.Id == id);
+
+                updatedTask.Title_task = sanitizer.Sanitize(updatedTask.Title_task);
+                updatedTask.Description_task = sanitizer.Sanitize(updatedTask.Description_task);
+                updatedTask.Media = sanitizer.Sanitize(updatedTask.Media);
 
                 task.Title_task = updatedTask.Title_task;
                 task.Description_task = updatedTask.Description_task;
