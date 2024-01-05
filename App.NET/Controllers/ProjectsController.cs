@@ -39,8 +39,17 @@ namespace App.NET.Controllers
 
         public IActionResult Show(int id)
         {
-            var project =  db.Projects.Include("Tasks").Where(p => p.Id == id).First();
-                          
+            var project =  db.Projects.Where(p => p.Id == id).First();
+            var tasks = db.Tasks.Where(task =>  task.Project_id == id);
+            ViewBag.tasks = tasks;
+            ViewBag.owner = db.Users.Where(p => p.Id == project.Users_Id).First();
+
+            var users = db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == id));
+
+            var max_afisare_useri = 5;
+            ViewBag.users = users.Take(max_afisare_useri); //l-om doar primele x persoane
+            if (users.Count() > max_afisare_useri) { ViewBag.countUsers = users.Count() - max_afisare_useri; }
+
             if (project == null)
             {
                 return NotFound();

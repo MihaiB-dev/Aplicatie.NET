@@ -116,11 +116,16 @@ namespace App.NET.Controllers
 
             Team team = _db.Teams.Find(id);
 
+            var users = _db.Users.Where(user => user.Team_member.Any(j => j.Team_id == id));
+
+            var max_afisare_useri = 5;
+            ViewBag.users = users.Take(max_afisare_useri); //l-om doar primele x persoane
+            if(users.Count() > max_afisare_useri) { ViewBag.countUsers = users.Count() - max_afisare_useri; }
+
             if (team == null)
             {
                 return NotFound();
             }
-
             //integram proiectele care exista in aceasta echipa
 
             //afisez proiectele care le are userul curent
@@ -135,13 +140,7 @@ namespace App.NET.Controllers
             var other_projects = _db.Projects.Where(project => project.UserProjects.All(j => j.User_id != local_user) && project.Team_Id == id);
             if(other_projects.Count() != 0){ViewBag.OtherProjects = other_projects;}
 
-
-            //ICollection<Team_member> teamMembers = _db.Team_members.Include(tm => tm.User)
-            //.Where(tm => tm.Team_id == id)
-            //.ToList();
-
             ViewBag.Team = team;
-            //ViewBag.TeamMembers = teamMembers;
 
             return View(team);
         }

@@ -13,30 +13,59 @@
         </ul>
     </div>
 </div>
-<h2 class="text-center" style="margin-top:1rem;">@Model.Title_project</h2>
 
-<div class="container">
+<h2 style="margin-top:1rem;">Project: @Model.Title_project</h2>
+
+<div>
     
-    <div class="row">
-        <div class="col-md-6">
-            <p>@Model.Description</p>           
+        <p>Description: @Model.Description</p>
+        <p>
+            <span style="font-weight: bold;">Owner: </span>
+            @ViewBag.owner.UserName
+        </p>
+        @*afisarea persoanelor din proiect*@
+        <p>
+            <span style="font-weight: bold;">People in the team: </span>
+            @foreach (ApplicationUser user in ViewBag.users)
+            {
+                <span>@user.UserName, </span>
+            }
+        </p>
+        @if (ViewBag.countUsers != null)
+        {
+            <span>+ @(ViewBag.countUsers)</span>
+        }
+        <h3>Task-uri:</h3>
+        @*Vor fi taskuri not started, work in progres, finished*@
+        <h4 style="margin-top:1rem;">Not started:</h4>
+
+        <div class="items-container">
+            @foreach (Task_table task in ViewBag.tasks)
+            {
+                <div onclick="location.href='/Tasks/Show/@task.Id';" class="card team-card">
+
+                    <div class="card-body">
+
+                        <h3 class="card-title alert-success py-3 px-3 rounded-2">@task.Title_task</h3>
+
+                        <div class="card-text">Status: @task.Status</div>
+
+
+                        <div class="card-text">
+                            Deadline: @task.Data_end
+                        </div>
+                    </div>
+                </div>
+
+            }
         </div>
-        <div class="col-md-6">
-            <h3>Task-uri:</h3>
-            <ul>
-                @foreach (var task in Model.Tasks)
-                { 
-                    <li>@task.Title_task</li>
-                }
-            </ul>
-        </div>
-    </div>
-    <div class="row">
+        
+
         <div class="col-md-12">
             <a href="/Projects/Edit/@Model.Id" class="btn btn-warning">Editează</a>
             <form method="post" action="/Projects/Delete/@Model.Id" class="d-inline">
                 <button type="submit" class="btn btn-danger">Șterge</button>
             </form>
         </div>
-    </div>
+    
 </div>

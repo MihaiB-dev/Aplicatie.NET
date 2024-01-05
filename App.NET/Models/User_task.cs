@@ -5,7 +5,6 @@ namespace App.NET.Models
     public class User_task
     {
         [Key]
-        public int Id { get; set; }
         public string User_id { get; set; }
         public int Task_id { get; set; }
        

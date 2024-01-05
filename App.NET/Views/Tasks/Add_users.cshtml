@@ -3,3 +3,19 @@
 *@
 @{
 }
+@model IEnumerable<App.NET.Models.ApplicationUser>
+
+<h3 sstyle="text-align:center">Add members to the Task</h3>
+@if (@ViewBag.none)
+{
+    <p>There are no people to add. All the project users are in this task or there is only you in this project</p>
+}
+@foreach (ApplicationUser user in Model)
+{
+    <form class="add_users" method="post" action="/Tasks/Add_Users">
+        <input type="hidden" name="Task_id" value="@ViewBag.task_id" />
+        <input type="hidden" name="User_Id" value="@user.Id" />
+        <p>@user.UserName</p>
+        <button type="submit" class="btn btn-success button_add_user">Add User</button>
+    </form>
+}

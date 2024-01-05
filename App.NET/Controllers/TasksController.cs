@@ -96,8 +96,9 @@ namespace App.NET.Controllers
         {
             var task = _db.Tasks.Find(id);
 
-
-            if(task == null)
+            var users = _db.Users.Where(user => user.User_task.Any(j => j.Task_id == id));
+            ViewBag.users = users;
+            if (task == null)
             {
                 return NotFound();
             }
@@ -115,8 +116,16 @@ namespace App.NET.Controllers
             var users =_db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id));
             if (users.Count() == 0) { ViewBag.none = true; }
             else { ViewBag.none = false; }
-            ViewBag.project_id = id;
+            ViewBag.task_id = id;
             return View(users);
+        }
+
+        [HttpPost]
+        public IActionResult Add_Users(User_task usertask)
+        {
+            _db.User_tasks.Add(usertask);
+            _db.SaveChanges();
+            return RedirectToAction("Add_Users", new { id = usertask.Task_id });
         }
         public IActionResult Edit(int id)
         {

@@ -56,6 +56,19 @@
         <div>
             <h4 class="team_title">Team: @Model.Name</h4>
             <hr />
+            @*afisarea persoanelor din echipa*@
+            <p>
+                <span style="font-weight: bold;">People in the team: </span>
+            @foreach(ApplicationUser user in ViewBag.users)
+            {
+                <span>@user.UserName, </span>
+            }
+            </p>
+            @if(ViewBag.countUsers != null)
+            {
+                <span>+ @(ViewBag.countUsers)</span>
+            }
+
             @if(ViewBag.MyProjects != null)
             {
                 <h3>My projects</h3>

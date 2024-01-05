@@ -6,13 +6,13 @@
 
 @model App.NET.Models.Task_table
 
-<a href="Tasks/Add_users/@Model.Id">
+<a href="/Tasks/Add_users/@Model.Id">
     <button type="button" class="btn btn-success" style="display:flex;align-content:center;">
         <span class="material-symbols-outlined">
             add
         </span><span>Add users to the Task</span>
     </button>
-
+</a>
     <div>
         <dl class="row">
             <dt class="col-sm-2">ID:</dt>
@@ -32,18 +32,23 @@
 
             <dt class="col-sm-2">Data finalizare:</dt>
             <dd class="col-sm-10">@Model.Data_end</dd>
-
-            <dt class="col-sm-2">Media:</dt>
-            <dd class="col-sm-10">@Model.Media</dd>
-
-
         </dl>
     </div>
 
+@*afisarea persoanelor din tasks*@
+<span style="font-weight: bold;">People doing the task: </span>
+<ul>
+    @foreach (ApplicationUser user in ViewBag.users)
+    {
+        <li>@user.UserName</li>
+    }
+</ul>
+
+<h3>Media:</h3>
+<div class="card-text">@Html.Raw(Model.Media)</div>
     <a asp-action="Index">Înapoi la listă</a>
 
-    <div class="card-text">@Html.Raw(Model.Media)</div>
-</a>
+    
 
 
 
