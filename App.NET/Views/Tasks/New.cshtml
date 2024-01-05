@@ -26,6 +26,32 @@
         <span asp-validation-for="Title_task" class="text-danger"></span>
     </div>
 
+        <!--Descriere-->
+
+    <div class="form-group">
+            <label asp-for="Description_task"></label>
+            <input asp-for="Description_task" class="form-control" />
+            <span asp-validation-for="Description_task" class="text-danger"></span>
+    </div>
+
+        <!--Data start-->
+
+    <div class="form-group">
+            <label asp-for="Data_start"></label>
+            <input asp-for="Data_start" class="form-control" />
+            <span asp-validation-for="Data_start" class="text-danger"></span>
+    </div>
+
+        <!--Data finalizare-->
+
+    <div class="form-group">
+            <label asp-for="Data_end"></label>
+            <input asp-for="Data_end" class="form-control" />
+            <span asp-validation-for="Data_end" class="text-danger"></span>
+    </div>
+
+
+
     <!-- Alte câmpuri pentru descriere, status, data start, data finalizare, media -->
 
     <button type="submit" class="btn btn-primary">Create</button>

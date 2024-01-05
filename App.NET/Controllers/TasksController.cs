@@ -10,47 +10,71 @@ using TaskStatus = App.NET.Models.TaskStatus; // Pentru a nu se confunda cu Syst
 
 namespace App.NET.Controllers
 {
-    //[Authorize(Roles = "Organizator")]
+    [Authorize]
     public class TasksController : Controller
     {
         private readonly ApplicationDbContext _db;
 
-        public TasksController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public TasksController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager
+            )
         {
             _db = context;
+
+            _userManager = userManager;
+
+            _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Index()
         {
             var tasks = _db.Tasks.Include(t => t.Project).ToList();
             return View(tasks);
         }
 
-        public IActionResult New(int projectId)
+        [Authorize(Roles = "User,Editor,Admin")]
+        public IActionResult New(int id)
         {
-            Project project = _db.Projects.FirstOrDefault(p => p.Id == projectId);
-            ViewBag.Project = project;
+            Project project = _db.Projects.Find(id);
+            if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){
+                ViewBag.Project = project;
 
-            return View();
+                return View();
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa adaugati un nou task!!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Index", "Projects");
+            }
+
+            
         }
 
         [HttpPost]
-        public IActionResult New(int projectId, Task_table task)
+        public IActionResult New(int id, Task_table task)
         {
             if (ModelState.IsValid)
             {
-                task.Project_id = projectId;
+                task.Project_id = id;
                 task.Status = TaskStatus.NotStarted; // Setează statusul implicit
 
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
 
                 TempData["message"] = "Task-ul a fost adăugat!";
-                return RedirectToAction("Show", "Projects", new { id = projectId });
+                return RedirectToAction("Show", "Projects", new { id = id });
             }
             else
             {
-                Project project = _db.Projects.FirstOrDefault(p => p.Id == projectId);
+                Project project = _db.Projects.FirstOrDefault(p => p.Id == id);
                 ViewBag.Project = project;
                 return View(task);
             }
@@ -106,5 +130,7 @@ namespace App.NET.Controllers
             TempData["message"] = "Task-ul a fost șters!";
             return RedirectToAction("Show", "Projects", new { id = projectId });
         }
+
+          
     }
 }
