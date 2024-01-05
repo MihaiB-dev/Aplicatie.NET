@@ -10,7 +10,7 @@ using TaskStatus = App.NET.Models.TaskStatus; // Pentru a nu se confunda cu Syst
 
 namespace App.NET.Controllers
 {
-    [Authorize(Roles = "Organizator")]
+    //[Authorize(Roles = "Organizator")]
     public class TasksController : Controller
     {
         private readonly ApplicationDbContext _db;
