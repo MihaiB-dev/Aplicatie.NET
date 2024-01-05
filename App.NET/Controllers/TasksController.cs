@@ -10,7 +10,10 @@ using TaskStatus = App.NET.Models.TaskStatus; // Pentru a nu se confunda cu Syst
 
 namespace App.NET.Controllers
 {
+<<<<<<< Updated upstream
     [Authorize]
+=======
+>>>>>>> Stashed changes
     public class TasksController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -42,9 +45,15 @@ namespace App.NET.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult New(int id)
         {
+<<<<<<< Updated upstream
             Project project = _db.Projects.Find(id);
             if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){
                 ViewBag.Project = project;
+=======
+
+            Project project = _db.Projects.FirstOrDefault(p => p.Id == projectId);
+            ViewBag.Project = project;
+>>>>>>> Stashed changes
 
                 return View();
             }

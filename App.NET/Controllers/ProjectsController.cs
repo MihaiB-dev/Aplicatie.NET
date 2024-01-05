@@ -61,6 +61,7 @@ namespace App.NET.Controllers
             //luam toti utilizatorii care se afla in echipa si care nu se afla deja in proiect;
             var users = db.Users.Where(user => user.Team_member.Any(j => j.Team_id == project.Team_Id) && user.UserProjects.All(j=> j.Project_id != project.Id));
             if(users.Count() == 0) { ViewBag.none =  true; }
+            else { ViewBag.none =  false; }
             ViewBag.project_id = id;
             return View(users);
         }
