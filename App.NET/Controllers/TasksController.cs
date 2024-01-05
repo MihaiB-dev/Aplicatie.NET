@@ -10,10 +10,8 @@ using TaskStatus = App.NET.Models.TaskStatus; // Pentru a nu se confunda cu Syst
 
 namespace App.NET.Controllers
 {
-<<<<<<< Updated upstream
     [Authorize]
-=======
->>>>>>> Stashed changes
+
     public class TasksController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -45,15 +43,9 @@ namespace App.NET.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult New(int id)
         {
-<<<<<<< Updated upstream
             Project project = _db.Projects.Find(id);
             if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){
                 ViewBag.Project = project;
-=======
-
-            Project project = _db.Projects.FirstOrDefault(p => p.Id == projectId);
-            ViewBag.Project = project;
->>>>>>> Stashed changes
 
                 return View();
             }
@@ -88,7 +80,23 @@ namespace App.NET.Controllers
                 return View(task);
             }
         }
+        public IActionResult Show(int id)
+        {
+            var task = _db.Tasks.Find(id);
+            
+            return View(task);
+        }
 
+        public IActionResult Add_Users(int id)//id from the task
+        {
+
+            var task = _db.Tasks.Find(id);
+            var users =_db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id));
+            if (users.Count() == 0) { ViewBag.none = true; }
+            else { ViewBag.none = false; }
+            ViewBag.project_id = id;
+            return View(users);
+        }
         public IActionResult Edit(int id)
         {
             Task_table task = _db.Tasks.FirstOrDefault(t => t.Id == id);
