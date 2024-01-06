@@ -41,31 +41,106 @@
         {
             <span>+ @(ViewBag.countUsers)</span>
         }
-        <h3>Tasks:</h3>
-        @*Vor fi taskuri not started, work in progres, finished*@
-        <h4 style="margin-top:1rem;">Not started:</h4>
+        <div id="accordion">
+        @if (ViewBag.your_tasks_count != 0)
+        {
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Your Tasks (@ViewBag.your_tasks_count)
+                        </button>
+                    </h5>
+                </div>
 
-        <div class="items-container">
-            @foreach (Task_table task in ViewBag.tasks)
-            {
-                <div onclick="location.href='/Tasks/Show/@task.Id';" class="card team-card">
-
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
-
-                        <h3 class="card-title alert-success py-3 px-3 rounded-2">@task.Title_task</h3>
-
-                        <div class="card-text">Status: @task.Status</div>
-
-
-                        <div class="card-text">
-                            Deadline: @task.Data_end
+                        <div class="items-container">
+                            @foreach (Task_table task in ViewBag.your_tasks)
+                            {
+                                @Html.Partial("TaskInfo", task)
+                                ;
+                            }
                         </div>
                     </div>
                 </div>
+            </div>
+        }
+        @if (ViewBag.Notstarted_count != 0)
+        {
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Not Started (@ViewBag.Notstarted_count)
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="items-container">
+                            @foreach (Task_table task in ViewBag.Notstarted)
+                            {
+                                @Html.Partial("TaskInfo", task)
+                                ;
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Inprogress_count != 0)
+        {
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            In Progress (@ViewBag.Inprogress_count)
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="items-container">
+                            @foreach (Task_table task in ViewBag.Inprogress)
+                            {
+                                @Html.Partial("TaskInfo", task)
+                                ;
 
-            }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Completed_count != 0)
+        {
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Completed (@ViewBag.Completed_count)
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="items-container">
+                            @foreach (Task_table task in ViewBag.Completed)
+                            {
+                                @Html.Partial("TaskInfo", task)
+                                ;
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
         </div>
-        
+        @*Vor fi taskuri not started, work in progres, finished*@
+        <h4 style="margin-top:1rem;">Not started:</h4>
+
 
         <div class="col-md-12">
             <a href="/Projects/Edit/@Model.Id" class="btn btn-warning">Editează</a>

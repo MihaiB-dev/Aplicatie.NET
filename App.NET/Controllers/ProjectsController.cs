@@ -40,8 +40,44 @@ namespace App.NET.Controllers
         public IActionResult Show(int id)
         {
             var project =  db.Projects.Where(p => p.Id == id).First();
-            var tasks = db.Tasks.Where(task =>  task.Project_id == id);
-            ViewBag.tasks = tasks;
+            //avem 4 type de taskuri: Your tasks, Notstarted, Inprogress, Completed
+            var local_user = _userManager.GetUserId(User);
+            //1. Your tasks: sa se afiseze taskurile notstarted sau Inprogress din proiectul curent unde face parte userul curent
+            var your_tasks = db.Tasks.Where(
+                p => p.Project_id == id
+                && (p.Status == Models.TaskStatus.NotStarted || p.Status == Models.TaskStatus.InProgress)
+                && p.User_task.Any(j => j.User_id == local_user && j.Task_id == id));
+
+            //2. Notstarted: sa se afiseze taskurile notstarted din proiectul curent unde NU face parte userul curent
+            var Notstarted = db.Tasks.Where(
+                p => p.Project_id == id
+                && p.Status == Models.TaskStatus.NotStarted
+                && p.User_task.All(j => j.User_id != local_user && j.Task_id == id));
+
+            //3. Inprogress: sa se afiseze taskurile Inprogress din proiectul curent unde NU face parte userul curent
+            var Inprogress = db.Tasks.Where(
+                p => p.Project_id == id
+                && p.Status == Models.TaskStatus.InProgress
+                && p.User_task.All(j => j.User_id != local_user && j.Task_id == id));
+
+            //4. Completed: sa se afiseze taskurile Completed din proiectul curent unde NU face parte userul curent
+            var Completed = db.Tasks.Where(
+                p => p.Project_id == id
+                && p.Status == Models.TaskStatus.Completed
+                && p.User_task.All(j => j.User_id != local_user && j.Task_id == id));
+
+
+            //var tasks = db.Tasks.Where(task =>  task.Project_id == id);
+            ViewBag.your_tasks = your_tasks;
+            ViewBag.Notstarted = Notstarted;
+            ViewBag.InProgress = Inprogress;
+            ViewBag.Completed = Completed;
+
+            ViewBag.your_tasks_count = your_tasks.Count();
+            ViewBag.Notstarted_count = Notstarted.Count();
+            ViewBag.InProgress_count = Inprogress.Count();
+            ViewBag.Completed_count = Completed.Count();
+
             ViewBag.owner = db.Users.Where(p => p.Id == project.Users_Id).First();
             ViewBag.teamName = db.Teams.Where(p => p.Id == project.Team_Id).First().Name;
 
