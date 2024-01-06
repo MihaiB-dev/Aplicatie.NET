@@ -1,5 +1,10 @@
 ﻿@model Team
-
+@if (TempData["message"] != null)
+{
+    <div class="alert @TempData["messageType"] p-3 rounded-3 text-center mb-5">
+        @TempData["message"]
+    </div>
+}
 <div class="d-flex" id="wrapper">
     <div class="bg-light border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Your teams</div>
@@ -50,11 +55,15 @@
                 <ul>
                     <li><a href="/Projects/New?team=@Model.Id">Create Project</a></li>
                     <li><a href="#">LeaderBoard</a></li>
+                    @if (ViewBag.esteAdmin)
+                    {
+                        <li><a href="/Teams/Delete/@Model.Id">Delete Team</a></li>
+                    }
                 </ul>
             </div>
         </div>
         <div>
-            <h4 class="team_title">Team: @Model.Name</h4>
+            <h4 style="margin-top:1rem;">Team: @Model.Name</h4>
             <hr />
             @*afisarea persoanelor din echipa*@
             <p>
@@ -72,65 +81,51 @@
             @if(ViewBag.MyProjects != null)
             {
                 <h3>My projects</h3>
+                <div class="items-container">
                 @foreach (var project in ViewBag.MyProjects)
                 {
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">@project.Title_project</h5>
-                                <p class="card-text">@project.Description</p>
-                                <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
-                                <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
-                                <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
-                                    <button type="submit" class="btn btn-danger">Șterge</button>
-                                </form>
-                            </div>
+                    <div onclick="location.href='/Projects/Show/@project.Id';" class="card team-card">
+                        <div class="card-body">
+                                <h3 class="card-title alert-success py-3 px-3 rounded-2">@project.Title_project</h3>
+                                <div class="card-text">@project.Description</div>
                         </div>
                     </div>
                 }
+                </div>
             }
             
             @if(ViewBag.CurrentProjects != null)
             {
                 <h3>Current Projects</h3>
+                <div class="items-container">
                 @foreach (var project in ViewBag.CurrentProjects)
                 {
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">@project.Title_project</h5>
-                                <p class="card-text">@project.Description</p>
-                                <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
-                                <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
-                                <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
-                                    <button type="submit" class="btn btn-danger">Șterge</button>
-                                </form>
-                            </div>
+                    <div onclick="location.href='/Projects/Show/@project.Id';" class="card team-card">
+                        <div class="card-body">
+                            <h3 class="card-title alert-success py-3 px-3 rounded-2">@project.Title_project</h3>
+                            <div class="card-text">@project.Description</div>
                         </div>
                     </div>
                 }
+                </div>
                 
             }
 
             @if(ViewBag.OtherProjects != null)
             {
                 <h3>Other Projects</h3>
+
+                <div class="items-container">
                 @foreach (var project in ViewBag.OtherProjects)
                 {
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">@project.Title_project</h5>
-                                <p class="card-text">@project.Description</p>
-                                <a href="/Projects/Show/@project.Id" class="btn btn-primary">Detalii</a>
-                                <a href="/Projects/Edit/@project.Id" class="btn btn-warning">Editează</a>
-                                <form method="post" action="/Projects/Delete/@project.Id" class="d-inline">
-                                    <button type="submit" class="btn btn-danger">Șterge</button>
-                                </form>
-                            </div>
+                    <div class="card team-card disable">
+                        <div class="card-body">
+                            <h3 class="card-title alert-success py-3 px-3 rounded-2">@project.Title_project</h3>
+                            <div class="card-text">@project.Description</div>
                         </div>
                     </div>
                 }
+                </div>
                 
             }
 
