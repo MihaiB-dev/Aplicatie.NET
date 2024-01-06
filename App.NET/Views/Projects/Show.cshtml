@@ -14,6 +14,12 @@
     </div>
 </div>
 
+<a href="/Teams/Show/@Model.Team_Id">
+    <button type="button" class="btn btn-dark" style="display:flex;align-content:center;margin-top:1rem;">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Back to the Team: @ViewBag.teamName
+        </button>
+</a>
 <h2 style="margin-top:1rem;">Project: @Model.Title_project</h2>
 
 <div>
@@ -35,7 +41,7 @@
         {
             <span>+ @(ViewBag.countUsers)</span>
         }
-        <h3>Task-uri:</h3>
+        <h3>Tasks:</h3>
         @*Vor fi taskuri not started, work in progres, finished*@
         <h4 style="margin-top:1rem;">Not started:</h4>
 

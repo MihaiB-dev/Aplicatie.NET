@@ -43,6 +43,7 @@ namespace App.NET.Controllers
             var tasks = db.Tasks.Where(task =>  task.Project_id == id);
             ViewBag.tasks = tasks;
             ViewBag.owner = db.Users.Where(p => p.Id == project.Users_Id).First();
+            ViewBag.teamName = db.Teams.Where(p => p.Id == project.Team_Id).First().Name;
 
             var users = db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == id));
 
@@ -71,7 +72,7 @@ namespace App.NET.Controllers
             var users = db.Users.Where(user => user.Team_member.Any(j => j.Team_id == project.Team_Id) && user.UserProjects.All(j=> j.Project_id != project.Id));
             if(users.Count() == 0) { ViewBag.none =  true; }
             else { ViewBag.none =  false; }
-            ViewBag.project_id = id;
+            ViewBag.project = project;
             return View(users);
         }
 

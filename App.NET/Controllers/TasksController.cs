@@ -98,6 +98,7 @@ namespace App.NET.Controllers
 
             var users = _db.Users.Where(user => user.User_task.Any(j => j.Task_id == id));
             ViewBag.users = users;
+            ViewBag.projectName = _db.Projects.Where(p => p.Id == task.Project_id).First().Title_project;
             if (task == null)
             {
                 return NotFound();
@@ -116,7 +117,7 @@ namespace App.NET.Controllers
             var users =_db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id));
             if (users.Count() == 0) { ViewBag.none = true; }
             else { ViewBag.none = false; }
-            ViewBag.task_id = id;
+            ViewBag.task = task;
             return View(users);
         }
 

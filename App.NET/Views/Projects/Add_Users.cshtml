@@ -6,6 +6,12 @@
 @model IEnumerable<App.NET.Models.ApplicationUser>
 
 <h3 sstyle="text-align:center">Add members to the project</h3>
+<a href="/Projects/Show/@ViewBag.project.Id">
+    <button type="button" class="btn btn-dark" style="display:flex;align-content:center;margin-top:1rem;">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Back to the Project: @ViewBag.project.Title_project
+    </button>
+</a>
 @if (@ViewBag.none)
 {
     <p>There are no people to add. All the team users are in this project or there is only you in this team</p>
@@ -13,7 +19,7 @@
 @foreach(ApplicationUser user in Model)
 {
     <form class="add_users" method="post" action="/Projects/Add_Users">
-        <input type="hidden" name="Project_id" value="@ViewBag.project_id" />
+        <input type="hidden" name="Project_id" value="@ViewBag.project.Id" />
         <input type="hidden" name="User_Id" value="@user.Id"/>
         <p>@user.UserName</p>
         <button type="submit" class="btn btn-success button_add_user">Add User</button>
