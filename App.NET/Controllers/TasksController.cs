@@ -44,8 +44,10 @@ namespace App.NET.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult New()
         {
+
             var id = Convert.ToInt32(HttpContext.Request.Query["project"]);
             Project project = _db.Projects.Find(id);
+
             if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){
                 ViewBag.Project = project;
 
@@ -55,7 +57,7 @@ namespace App.NET.Controllers
             {
                 TempData["message"] = "Nu aveti dreptul sa adaugati un nou task!!";
                 TempData["messageType"] = "alert-danger";
-                return RedirectToAction("Index", "Projects");
+                return RedirectToAction("Show", "Projects", new {id = id});
             }
 
             
@@ -91,7 +93,7 @@ namespace App.NET.Controllers
             }
         }
 
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
             var task = _db.Tasks.Find(id);
@@ -103,22 +105,46 @@ namespace App.NET.Controllers
             {
                 return NotFound();
             }
+            if (_db.Projects.Where(p => p.Id == task.Project_id).First().Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                SetAccessRights(_db.Projects.Where(p => p.Id == task.Project_id).First().Users_Id == _userManager.GetUserId(User));
+            }
+            else
+            {
+                ViewBag.AfisareButoane = false;
+                ViewBag.EsteAdmin = false;
 
-            
+            }
+            var local_user = _userManager.GetUserId(User);
+            if (_db.UserProjects.Where(p=> p.User_id == local_user && p.Project_id == task.Project_id).Count() == 0 && !User.IsInRole("Admin"))
+            {
+                TempData["message"] = "Nu aveti dreptul la acest task!!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Index", "Teams");
+            }
 
-            
+
             return View(task);
         }
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Add_Users(int id)//id from the task
         {
-
             var task = _db.Tasks.Find(id);
-            var users =_db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id));
-            if (users.Count() == 0) { ViewBag.none = true; }
-            else { ViewBag.none = false; }
-            ViewBag.task = task;
-            return View(users);
+            if (_db.Projects.Where(p => p.Id == task.Project_id).First().Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                var users = _db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id));
+                if (users.Count() == 0) { ViewBag.none = true; }
+                else { ViewBag.none = false; }
+                ViewBag.task = task;
+
+                return View(users);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa adaugati membrii la task!!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Show", "Projects", new { id = id });
+            }
         }
 
         [HttpPost]
@@ -189,6 +215,21 @@ namespace App.NET.Controllers
             return RedirectToAction("Show", "Projects", new { id = projectId });
         }
 
-          
+        private void SetAccessRights(bool organizer = false)
+        {
+
+            ViewBag.AfisareButoane = true; //ori este organizator ori admin
+            if(organizer)
+            {
+                ViewBag.EsteOrganizator = true;
+            }
+            else
+            {
+                ViewBag.EsteOrganizator = false;
+            }
+            ViewBag.EsteAdmin = User.IsInRole("Admin"); //folosit pentru zonele in care doar adminul poate face lucruri
+
+
+        }
     }
 }

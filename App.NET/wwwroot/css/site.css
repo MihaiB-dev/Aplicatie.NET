@@ -129,6 +129,15 @@ body {
     transition: .2s;
     cursor:pointer;
 }
+.disable {
+    filter: brightness(90%)!important;
+    filter: blur(0.5px)!important;
+}
+    .disable:hover {
+        filter: brightness(90%) !important;
+        cursor: default;
+        filter: blur(0.5px)!important;
+    }
 #wrapper{
     height:100%;
 }

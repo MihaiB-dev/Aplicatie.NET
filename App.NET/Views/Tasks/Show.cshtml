@@ -3,16 +3,46 @@
 *@
 @{
 }
-
+@if (TempData["message"] != null)
+{
+    <div class="alert @TempData["messageType"] p-3 rounded-3 text-center mb-5">
+        @TempData["message"]
+    </div>
+}
 @model App.NET.Models.Task_table
 
-<a href="/Tasks/Add_users/@Model.Id">
-    <button type="button" class="btn btn-success" style="display:flex;align-content:center;">
-        <span class="material-symbols-outlined">
-            add
-        </span><span>Add users to the Task</span>
-    </button>
-</a>
+@if (ViewBag.AfisareButoane == true || ViewBag.EsteAdmin)
+{
+    <div class="nav_teams_show">
+        <div class="nav_show">
+            <ul style="width:40rem;">
+                <li>
+                    <a href="/Tasks/Add_users/@Model.Id">
+                        <span>Add users to the Task</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a>
+                        <form method="post" action="/Tasks/Delete/@Model.Id" class="d-inline">
+                            <button type="submit" style="background:none;color:inherit; border:none; padding:0; font:inherit; cursor: pointer; outline:inherit;">Delete task</button>
+                        </form>
+                    </a>
+                </li>
+                @if (ViewBag.EsteOrganizator)
+                {
+                    <li>
+                        <a href="/Tasks/Edit/@Model.Id">
+                            <span>Edit the task</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+}
+
 <a href="/Projects/Show/@Model.Project_id">
     <button type="button" class="btn btn-dark" style="display:flex;align-content:center;margin-top:1rem;">
         <span class="material-symbols-outlined">arrow_back</span>
@@ -52,7 +82,6 @@
 
 <h3>Media:</h3>
 <div class="card-text">@Html.Raw(Model.Media)</div>
-    <a asp-action="Index">Înapoi la listă</a>
 
     
 

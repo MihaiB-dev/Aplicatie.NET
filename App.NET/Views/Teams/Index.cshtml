@@ -1,5 +1,10 @@
 ﻿@*@model List<Team>*@
-
+@if (TempData["message"] != null)
+{
+    <div class="alert @TempData["messageType"] p-3 rounded-3 text-center mb-5">
+        @TempData["message"]
+    </div>
+}
 <div class="d-flex" id="wrapper">
     <div class="bg-light border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Your teams</div>
@@ -41,22 +46,34 @@
         <div class="items-container">
         @foreach (App.NET.Models.Team team in ViewBag.teams)
         {
+                @if (ViewBag.EsteAdmin)
+                {
+                    <div onclick="location.href='/Teams/Show/@team.Id';" class="card team-card">
 
-                <div onclick="location.href='/Teams/Auth/@team.Id';" class="card team-card">
+                        <div class="card-body">
 
-                    <div class="card-body">
+                            <h3 class="card-title alert-success py-3 px-3 rounded-2">@team.Name</h3>
 
-                        <h3 class="card-title alert-success py-3 px-3 rounded-2">@team.Name</h3>
-
-                        <div class="card-text">Creator: @ViewBag.creator[team.Id]</div>
-
-                    
-                        <div class="card-text">
-                            Number of people: @ViewBag.count[team.Id]
+                            <div class="card-text">
+                                Number of people: @ViewBag.count[team.Id]
+                            </div>
                         </div>
                     </div>
-                </div>
-            
+                }
+                else
+                {
+                    <div onclick="location.href='/Teams/Auth/@team.Id';" class="card team-card">
+
+                        <div class="card-body">
+
+                            <h3 class="card-title alert-success py-3 px-3 rounded-2">@team.Name</h3>
+
+                            <div class="card-text">
+                                Number of people: @ViewBag.count[team.Id]
+                            </div>
+                        </div>
+                    </div>
+                }
         }
         </div>
 

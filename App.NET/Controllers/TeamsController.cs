@@ -28,7 +28,7 @@ namespace App.NET.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Index()
         {
             //preluam toate echipele din care face parte userul respectiv.
@@ -52,7 +52,14 @@ namespace App.NET.Controllers
             ViewBag.creator = creators;
             ViewBag.count = count;
 
-
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.EsteAdmin = User.IsInRole("Admin"); 
+            }
+            else
+            {
+                ViewBag.EsteAdmin = false;
+            }
             //paginare
             int _perPage = 4;
             int totalItems = teams.Count();
@@ -72,6 +79,7 @@ namespace App.NET.Controllers
             ViewBag.teams = paginateTeams;
             return View(); // Asigură-te că transmiți lista de echipe la View
         }
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Auth(int id)
         {
             var team = _db.Teams.Where(team => team.Id == id).First();
@@ -99,6 +107,7 @@ namespace App.NET.Controllers
                 return View();
             }
         }
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Your_Teams()
         {
             var local_user = _userManager.GetUserId(User);
@@ -107,9 +116,27 @@ namespace App.NET.Controllers
             ViewBag.teams = your_teams;
             return View();
         }
+
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
             var local_user = _userManager.GetUserId(User);
+            //daca userul este in echipa
+            if (_db.Team_members.Where(p => p.Team_id == id && p.User_id == local_user).Count() == 0 && !User.IsInRole("Admin"))
+            {
+                TempData["message"] = "Nu aveti dreptul sa intrati in aceasta echipa";
+                TempData["messageType"] = "alert-danger";
+
+                return RedirectToAction("Index", "Teams");
+            }
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.esteAdmin = true;
+            }
+            else
+            {
+                ViewBag.esteAdmin = false;
+            }
 
             var your_teams = _db.Teams.Where(team => team.Team_member.Any(j => j.User_id == local_user));
             ViewBag.your_teams = your_teams;
@@ -143,8 +170,9 @@ namespace App.NET.Controllers
             ViewBag.Team = team;
 
             return View(team);
+            
         }
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult New()
         {
             return View();
@@ -168,7 +196,7 @@ namespace App.NET.Controllers
                 return RedirectToAction("Index");
            
         }
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Edit(int id)
         {
             Team team = _db.Teams.Find(id);

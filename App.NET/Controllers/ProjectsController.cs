@@ -36,12 +36,21 @@ namespace App.NET.Controllers
 
             return View(projects);
         }
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
             var project =  db.Projects.Where(p => p.Id == id).First();
             //avem 4 type de taskuri: Your tasks, Notstarted, Inprogress, Completed
             var local_user = _userManager.GetUserId(User);
+
+            //daca userul care a incercat sa intre in show nu face parte din proiect si nu este admin
+            if(db.UserProjects.Where(p => p.User_id == local_user && p.Project_id == project.Id).Count() == 0 && !User.IsInRole("Admin"))
+            {
+                TempData["message"] = "Nu aveti dreptul sa intrati in acest proiect";
+                TempData["messageType"] = "alert-danger";
+
+                return RedirectToAction("Index", "Teams");
+            }
             //1. Your tasks: sa se afiseze taskurile notstarted sau Inprogress din proiectul curent unde face parte userul curent
             var your_tasks = db.Tasks.Where(
                 p => p.Project_id == id
@@ -92,24 +101,41 @@ namespace App.NET.Controllers
                 return NotFound();
             }
 
+
+            //verificare daca este organizator
+            if(project.Users_Id == local_user || User.IsInRole("Admin"))
+            {
+                SetAccessRights();
+            }
+            else
+            {
+                ViewBag.AfisareButoane = false;
+                ViewBag.EsteAdmin = false;
+            }
             return View(project);
         }
+        [Authorize(Roles = "User,Editor,Admin")]
         //trb sa verificam daca acest user este creatorul proiectului
         public IActionResult Add_Users(int id)//id-ul reprezinta id-ul proiectului la care adaugam useri
         {
             var project = db.Projects.Find(id);
-            if(project.Users_Id != _userManager.GetUserId(User))
+            if(project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
-                //return a TempData aswell (TODO)
+                //luam toti utilizatorii care se afla in echipa si care nu se afla deja in proiect;
+                var users = db.Users.Where(user => user.Team_member.Any(j => j.Team_id == project.Team_Id) && user.UserProjects.All(j => j.Project_id != project.Id));
+                if (users.Count() == 0) { ViewBag.none = true; }
+                else { ViewBag.none = false; }
+                ViewBag.project = project;
 
-                return RedirectToAction("Show", "Projects", new { id =id });
+
+                return View(users);
             }
-            //luam toti utilizatorii care se afla in echipa si care nu se afla deja in proiect;
-            var users = db.Users.Where(user => user.Team_member.Any(j => j.Team_id == project.Team_Id) && user.UserProjects.All(j=> j.Project_id != project.Id));
-            if(users.Count() == 0) { ViewBag.none =  true; }
-            else { ViewBag.none =  false; }
-            ViewBag.project = project;
-            return View(users);
+            ViewBag.AfisareButoane = false;
+            ViewBag.EsteAdmin = false;
+            TempData["message"] = "Nu aveti dreptul sa adaugati utilizatori la acest proiect";
+            TempData["messageType"] = "alert-danger";
+
+            return RedirectToAction("Show", "Projects", new { id = id });
         }
 
         [HttpPost]
@@ -160,17 +186,28 @@ namespace App.NET.Controllers
         }
 
 
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Edit(int id)
         {
-            Project project = db.Projects.FirstOrDefault(p => p.Id == id);
-
+            Project project = db.Projects.Find(id);
             if (project == null)
             {
                 return NotFound();
             }
+            if (db.Projects.Find(id).Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                return View(project);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa adaugati utilizatori la acest proiect";
+                TempData["messageType"] = "alert-danger";
 
-            return View(project);
+                return RedirectToAction("Index", "Teams");
+            }
+
+           
+
         }
 
 
@@ -201,18 +238,40 @@ namespace App.NET.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
+
             Project project = db.Projects.Find(id);
 
             if (project == null)
             {
                 return NotFound();
             }
+            if (db.Projects.Find(id).Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                db.Projects.Remove(project);
+                db.SaveChanges();
 
-            db.Projects.Remove(project);
-            db.SaveChanges();
+                TempData["message"] = "Proiectul a fost sters!";
+                return RedirectToAction("Show", "Teams", new {id = project.Id});
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa stergi acest proiect";
+                TempData["messageType"] = "alert-danger";
 
-            TempData["message"] = "Proiectul a fost sters!";
-            return RedirectToAction("Index");
+                return RedirectToAction("Index", "Teams");
+            }
+            
+        }
+
+        //este activat doar daca userul este organizator sau admin
+        private void SetAccessRights()
+        {
+            
+            ViewBag.AfisareButoane = true; //ori este organizator ori admin
+
+            ViewBag.EsteAdmin = User.IsInRole("Admin"); //folosit pentru zonele in care doar adminul poate face lucruri
+
+            
         }
     }
 }
