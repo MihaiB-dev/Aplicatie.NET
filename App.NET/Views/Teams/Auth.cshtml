@@ -1,4 +1,9 @@
-﻿
+﻿@if (TempData["message"] != null)
+{
+    <div class="alert @TempData["messageType"] p-3 rounded-3 text-center mb-5">
+        @TempData["message"]
+    </div>
+}
 <h2>Join the Team : @ViewBag.team.Name</h2>
 <div class="container">
     <div class="row">
