@@ -55,25 +55,25 @@ namespace App.NET.Controllers
             var your_tasks = db.Tasks.Where(
                 p => p.Project_id == id
                 && (p.Status == Models.TaskStatus.NotStarted || p.Status == Models.TaskStatus.InProgress)
-                && p.User_task.Any(j => j.User_id == local_user && j.Task_id == id));
+                && p.User_task.Any(j => j.User_id == local_user));
 
             //2. Notstarted: sa se afiseze taskurile notstarted din proiectul curent unde NU face parte userul curent
             var Notstarted = db.Tasks.Where(
                 p => p.Project_id == id
                 && p.Status == Models.TaskStatus.NotStarted
-                && p.User_task.All(j => j.User_id != local_user && j.Task_id == id));
+                && p.User_task.All(j => j.User_id != local_user));
 
             //3. Inprogress: sa se afiseze taskurile Inprogress din proiectul curent unde NU face parte userul curent
             var Inprogress = db.Tasks.Where(
                 p => p.Project_id == id
                 && p.Status == Models.TaskStatus.InProgress
-                && p.User_task.All(j => j.User_id != local_user && j.Task_id == id));
+                && p.User_task.All(j => j.User_id != local_user));
 
             //4. Completed: sa se afiseze taskurile Completed din proiectul curent unde NU face parte userul curent
             var Completed = db.Tasks.Where(
                 p => p.Project_id == id
                 && p.Status == Models.TaskStatus.Completed
-                && p.User_task.All(j => j.User_id != local_user && j.Task_id == id));
+                && p.User_task.All(j => j.User_id != local_user));
 
 
             //var tasks = db.Tasks.Where(task =>  task.Project_id == id);

@@ -116,15 +116,31 @@
                 <h3>Other Projects</h3>
 
                 <div class="items-container">
-                @foreach (var project in ViewBag.OtherProjects)
-                {
-                    <div class="card team-card disable">
-                        <div class="card-body">
-                            <h3 class="card-title alert-success py-3 px-3 rounded-2">@project.Title_project</h3>
-                            <div class="card-text">@project.Description</div>
-                        </div>
-                    </div>
-                }
+                    @if (ViewBag.esteAdmin)
+                    {
+                        @foreach (var project in ViewBag.OtherProjects)
+                        {
+                            <div onclick="location.href='/Projects/Show/@project.Id';" class="card team-card">
+                                <div class="card-body">
+                                    <h3 class="card-title alert-success py-3 px-3 rounded-2">@project.Title_project</h3>
+                                    <div class="card-text">@project.Description</div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var project in ViewBag.OtherProjects)
+                        {
+                            <div class="card team-card disable">
+                                <div class="card-body">
+                                    <h3 class="card-title alert-success py-3 px-3 rounded-2">@project.Title_project</h3>
+                                    <div class="card-text">@project.Description</div>
+                                </div>
+                            </div>
+                        }
+                    }
+
                 </div>
                 
             }

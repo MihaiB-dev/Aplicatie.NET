@@ -66,8 +66,7 @@
                         <div class="items-container">
                             @foreach (Task_table task in ViewBag.your_tasks)
                             {
-                                @Html.Partial("TaskInfo", task)
-                                ;
+                                @Html.Partial("TaskInfo", task);
                             }
                         </div>
                     </div>
@@ -89,8 +88,7 @@
                         <div class="items-container">
                             @foreach (Task_table task in ViewBag.Notstarted)
                             {
-                                @Html.Partial("TaskInfo", task)
-                                ;
+                                @Html.Partial("TaskInfo", task);
                             }
                         </div>
                     </div>
@@ -112,8 +110,7 @@
                         <div class="items-container">
                             @foreach (Task_table task in ViewBag.Inprogress)
                             {
-                                @Html.Partial("TaskInfo", task)
-                                ;
+                                @Html.Partial("TaskInfo", task);
 
                             }
                         </div>
@@ -136,8 +133,7 @@
                         <div class="items-container">
                             @foreach (Task_table task in ViewBag.Completed)
                             {
-                                @Html.Partial("TaskInfo", task)
-                                ;
+                                @Html.Partial("TaskInfo", task);
 
                             }
                         </div>
