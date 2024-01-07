@@ -73,17 +73,97 @@
 
 @*afisarea persoanelor din tasks*@
 <span style="font-weight: bold;">People doing the task: </span>
-<ul>
-    @foreach (ApplicationUser user in ViewBag.users)
-    {
-        <li>@user.UserName</li>
-    }
-</ul>
+
 
 <h3>Media:</h3>
 <div class="card-text">@Html.Raw(Model.Media)</div>
 
     
+
+@*afisarea comentariilor*@
+
+@foreach (var comm in Model.Comments)
+{
+    <div class="container">
+        <div class="row">
+            <div class=" col-md-2"></div>
+
+            <div class="col-md-8">
+                <div>
+                    <p>@comm.Text</p>
+                    <small>@comm.Date</small>
+                    <strong>@comm.UserId</strong>
+                </div>
+                <br>
+
+                <div class="d-flex">
+                    <div>
+                        <a class="btn btn-outline-primary" href="/Comments/Edit/@comm.Id"><i class="bg-info bi-pencil-square"></i>Editeaza</a>
+
+                    </div>
+
+                    <div>
+                        <form method="post" action="/Comments/Delete/@comm.Id">
+
+                            <button class="btn btn-outline-danger" type="submit"><i class="bg-danger bi-trash"></i>Sterge</button>
+
+
+                        </form>
+                    </div>
+                </div>
+
+                <br />
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+}
+
+@*adaugarea unui comentariu*@
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+
+            <div class="card">
+
+                <form method="post" action="/Tasks/Show/@Model.Id">
+
+                    <div class="card-body">
+                        <input type="hidden" name="TaskId" value="@Model.Id" />
+
+                        <label>Continut Comentariu</label>
+                        <br />
+
+                        <textarea class="form-control" name="Text"></textarea>
+
+                        @Html.ValidationMessage("Text", new { @class = "text-danger" })
+
+                        <br /><br />
+
+                        <button class="btn btn-success" type="submit">Adauga Comentariu</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+</div>
+
+
+
 
 
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace App.NET.Migrations
 {
-    public partial class plis : Migration
+    public partial class sperdoamneajutaaa : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -176,7 +176,9 @@ namespace App.NET.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title_project = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Users_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UsersId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Team_Id = table.Column<int>(type: "int", nullable: true),
                     TeamId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -245,6 +247,30 @@ namespace App.NET.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserProjects",
+                columns: table => new
+                {
+                    User_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Project_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProjects", x => new { x.User_id, x.Project_id });
+                    table.ForeignKey(
+                        name: "FK_UserProjects_AspNetUsers_User_id",
+                        column: x => x.User_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserProjects_Projects_Project_id",
+                        column: x => x.Project_id,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Scores",
                 columns: table => new
                 {
@@ -273,7 +299,9 @@ namespace App.NET.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Task_Id = table.Column<int>(type: "int", nullable: false),
                     TaskId = table.Column<int>(type: "int", nullable: false),
+                    User_Id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -296,25 +324,23 @@ namespace App.NET.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User_task",
+                name: "User_tasks",
                 columns: table => new
                 {
                     User_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Task_id = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Media = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Task_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User_task", x => new { x.User_id, x.Task_id });
+                    table.PrimaryKey("PK_User_tasks", x => new { x.User_id, x.Task_id });
                     table.ForeignKey(
-                        name: "FK_User_task_AspNetUsers_User_id",
+                        name: "FK_User_tasks_AspNetUsers_User_id",
                         column: x => x.User_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_User_task_Tasks_Task_id",
+                        name: "FK_User_tasks_Tasks_Task_id",
                         column: x => x.Task_id,
                         principalTable: "Tasks",
                         principalColumn: "Id",
@@ -421,9 +447,14 @@ namespace App.NET.Migrations
                 column: "Team_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_task_Task_id",
-                table: "User_task",
+                name: "IX_User_tasks_Task_id",
+                table: "User_tasks",
                 column: "Task_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProjects_Project_id",
+                table: "UserProjects",
+                column: "Project_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -450,7 +481,10 @@ namespace App.NET.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "User_task");
+                name: "User_tasks");
+
+            migrationBuilder.DropTable(
+                name: "UserProjects");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

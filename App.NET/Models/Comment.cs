@@ -14,7 +14,7 @@ namespace App.NET.Models
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Continutul comentariului este obligatoriu")]
         public string Text { get; set; }
 
         public DateTime Date { get; set; }

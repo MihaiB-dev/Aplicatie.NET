@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.NET.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240104131300_Nullable-UserProjects")]
-    partial class NullableUserProjects
+    [Migration("20240107131310_sper-doamne-ajutaaa")]
+    partial class sperdoamneajutaaa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,6 +131,9 @@ namespace App.NET.Migrations
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Task_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -138,6 +141,10 @@ namespace App.NET.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("User_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -162,12 +169,18 @@ namespace App.NET.Migrations
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Team_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title_project")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Users_Id")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -297,17 +310,11 @@ namespace App.NET.Migrations
                     b.Property<int>("Task_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Media")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("User_id", "Task_id");
 
                     b.HasIndex("Task_id");
 
-                    b.ToTable("User_task");
+                    b.ToTable("User_tasks");
                 });
 
             modelBuilder.Entity("App.NET.Models.UserProject", b =>
@@ -474,7 +481,7 @@ namespace App.NET.Migrations
             modelBuilder.Entity("App.NET.Models.Comment", b =>
                 {
                     b.HasOne("App.NET.Models.Task_table", "Task")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -653,6 +660,8 @@ namespace App.NET.Migrations
 
             modelBuilder.Entity("App.NET.Models.Task_table", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("User_task");
                 });
 

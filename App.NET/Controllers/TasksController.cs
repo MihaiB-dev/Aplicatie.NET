@@ -96,36 +96,84 @@ namespace App.NET.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
+            
+            var task = _db.Tasks.Include(t => t.User_task)
+                    .Include(t => t.Comments)
+                    .ThenInclude(comment => comment.User)
+                    .Where(t => t.Id == id)
+                    .First();
+            /*
             var task = _db.Tasks.Find(id);
-
-            var users = _db.Users.Where(user => user.User_task.Any(j => j.Task_id == id));
-            ViewBag.users = users;
-            ViewBag.projectName = _db.Projects.Where(p => p.Id == task.Project_id).First().Title_project;
+            
+            var comments = _db.Comments.Where(p => p.TaskId == id);
+            ViewBag.Comments = comments;
+            */
             if (task == null)
             {
                 return NotFound();
             }
-            if (_db.Projects.Where(p => p.Id == task.Project_id).First().Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+
+            if (_db.Projects.Any(p => p.Id == task.Project_id &&
+                                       (p.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))))
             {
-                SetAccessRights(_db.Projects.Where(p => p.Id == task.Project_id).First().Users_Id == _userManager.GetUserId(User));
+                SetAccessRights(_db.Projects.First(p => p.Id == task.Project_id).Users_Id == _userManager.GetUserId(User));
             }
             else
             {
                 ViewBag.AfisareButoane = false;
                 ViewBag.EsteAdmin = false;
-
             }
-            var local_user = _userManager.GetUserId(User);
-            if (_db.UserProjects.Where(p=> p.User_id == local_user && p.Project_id == task.Project_id).Count() == 0 && !User.IsInRole("Admin"))
+
+            var localUser = _userManager.GetUserId(User);
+
+
+            if (_db.UserProjects.Count(up => up.User_id == localUser && up.Project_id == task.Project_id) == 0 && !User.IsInRole("Admin"))
             {
                 TempData["message"] = "Nu aveti dreptul la acest task!!";
                 TempData["messageType"] = "alert-danger";
                 return RedirectToAction("Index", "Teams");
             }
 
-
             return View(task);
         }
+
+
+
+
+
+
+
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public IActionResult Show([FromForm] Comment comment)
+        {
+            comment.Date = DateTime.Now;
+
+            // preluam id-ul utilizatorului care posteaza comentariul
+            comment.UserId = _userManager.GetUserId(User);
+
+            if (true)
+            {
+                _db.Comments.Add(comment);
+                _db.SaveChanges();
+                return Redirect("/Tasks/Show/" + comment.TaskId);
+            }
+
+            else
+            {
+                Task_table art = _db.Tasks.Include(art => art.User_task)
+                                        .Include(art => art.Comments)
+                                        .ThenInclude(comment => comment.User)
+                                        .Where(art => art.Id == comment.TaskId)
+                                        .First();
+
+
+                SetAccessRights();
+
+                return View(art);
+            }
+        }
+
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Add_Users(int id)//id from the task
         {

@@ -39,5 +39,7 @@ namespace App.NET.Models
         public virtual Project? Project { get; set; }
         // conectare many to many
         public virtual ICollection<User_task>? User_task { get; set; }
+
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }

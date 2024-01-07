@@ -301,17 +301,11 @@ namespace App.NET.Migrations
                     b.Property<int>("Task_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Media")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("User_id", "Task_id");
 
                     b.HasIndex("Task_id");
 
-                    b.ToTable("User_task");
+                    b.ToTable("User_tasks");
                 });
 
             modelBuilder.Entity("App.NET.Models.UserProject", b =>
@@ -478,7 +472,7 @@ namespace App.NET.Migrations
             modelBuilder.Entity("App.NET.Models.Comment", b =>
                 {
                     b.HasOne("App.NET.Models.Task_table", "Task")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -657,6 +651,8 @@ namespace App.NET.Migrations
 
             modelBuilder.Entity("App.NET.Models.Task_table", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("User_task");
                 });
 
