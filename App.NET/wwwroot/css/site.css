@@ -284,3 +284,22 @@ label{
 .note-editor .dropdown-toggle::after {
     display: none;
 }
+
+.panel {
+    overflow: hidden;
+    padding: 0.5rem;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: #6b6b6b;
+    border-width: thin;
+    margin-bottom:1rem;
+}
+
+.panel p {
+    float:left;
+    font-size:1.2rem;
+}
+
+.panel button {
+    float:right;
+}

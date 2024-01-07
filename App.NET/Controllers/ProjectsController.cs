@@ -87,7 +87,16 @@ namespace App.NET.Controllers
             ViewBag.InProgress_count = Inprogress.Count();
             ViewBag.Completed_count = Completed.Count();
 
-            ViewBag.owner = db.Users.Where(p => p.Id == project.Users_Id).First();
+            var owner = db.Users.Where(p => p.Id == project.Users_Id);
+            if(owner.Count() == 0)
+            {
+                ViewBag.UserName = "owner was kicked out";
+            }
+            else
+            {
+                ViewBag.UserName = owner.First().UserName;
+
+            }
             ViewBag.teamName = db.Teams.Where(p => p.Id == project.Team_Id).First().Name;
 
             var users = db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == id));
