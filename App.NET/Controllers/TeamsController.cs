@@ -77,6 +77,7 @@ namespace App.NET.Controllers
 
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)_perPage);
             ViewBag.teams = paginateTeams;
+            ViewBag.teams_count = teams.Count();
             return View(); // Asigură-te că transmiți lista de echipe la View
         }
         [Authorize(Roles = "User,Editor,Admin")]
@@ -100,11 +101,15 @@ namespace App.NET.Controllers
                     User_id = local_user
                 });
                 _db.SaveChanges();
+                TempData["message"] = "Ati intrat in echipa:" + team.Name + " cu succes";
+                TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
             else
             {
-                return View();
+                TempData["message"] = "Parola este incorecta";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Auth", "Teams", new {id = id});
             }
         }
         [Authorize(Roles = "User,Editor,Admin")]
