@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yDqAlyDy23AGUq7CRQUP3/y3DhbUnGSMiD7PBYJ5X2Gdk92nuKXNvU+iL6ibKVPRdS6TN6deqP6PTwyt+/HW7Q==",
+  "dgSpecHash": "no/35HJCDbIvW6eF9rt7ob3kElt9Cxez4QePGn+hKxRLvkmI0OsPWqA73aeD8ka2sFCsMR102TCVEVO51aaTxQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\Desktop\\copie app\\App.NET\\App.NET\\App.NET.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\Facultate\\NET\\App Net (aproape final)\\App.NET\\App.NET\\App.NET.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\anglesharp\\0.17.1\\anglesharp.0.17.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\anglesharp.css\\0.17.0\\anglesharp.css.0.17.0.nupkg.sha512",
