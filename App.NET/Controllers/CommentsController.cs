@@ -77,9 +77,9 @@ namespace App.NET.Controllers
         {
             Comment comm = db.Comments.Find(id);
 
-            if (comm.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            if (comm.UserId == _userManager.GetUserId(User))
             {
-                if (ModelState.IsValid)
+                if (true)
                 {
                     comm.Text = requestComment.Text;
 

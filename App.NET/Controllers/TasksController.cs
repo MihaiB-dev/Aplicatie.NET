@@ -32,6 +32,7 @@ namespace App.NET.Controllers
             _userManager = userManager;
 
             _roleManager = roleManager;
+
         }
 
         [Authorize(Roles = "User,Editor,Admin")]
@@ -77,7 +78,14 @@ namespace App.NET.Controllers
                 task.Media = sanitizer.Sanitize(task.Media);
 
                 
-                task.Status = TaskStatus.NotStarted; // Setează statusul implicit
+               // task.Status = TaskStatus.NotStarted; // Setează statusul implicit
+                //task.Status = TaskStatus.InProgress;
+                //task.Status = TaskStatus.Completed;
+
+                // pentru statusul task-ului
+
+                
+
 
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
@@ -112,6 +120,7 @@ namespace App.NET.Controllers
             {
                 return NotFound();
             }
+            ViewBag.UserCurent = _userManager.GetUserId(User);
 
             if (_db.Projects.Any(p => p.Id == task.Project_id &&
                                        (p.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))))
@@ -210,7 +219,7 @@ namespace App.NET.Controllers
             ViewBag.Task = task;
             ViewBag.Project = project;
 
-            return View();
+            return View(task);
         }
 
         [HttpPost]

@@ -2,14 +2,14 @@
 
 namespace App.NET.Models
 {
-
+    
     public enum TaskStatus
     {
         NotStarted,
         InProgress,
         Completed
     }
-
+    
 
 
     public class Task_table
