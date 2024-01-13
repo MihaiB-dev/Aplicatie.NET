@@ -46,11 +46,11 @@ namespace App.NET.Controllers
         public IActionResult New()
         {
 
-            var id = Convert.ToInt32(HttpContext.Request.Query["project"]);
-            Project project = _db.Projects.Find(id);
+            var id = Convert.ToInt32(HttpContext.Request.Query["project"]); // preluam id-ul proiectului din query string
+            Project project = _db.Projects.Find(id);  
 
-            if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){
-                ViewBag.Project = project;
+            if (project.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")){ 
+                ViewBag.Project = project; 
 
                 return View();
             }
@@ -58,7 +58,7 @@ namespace App.NET.Controllers
             {
                 TempData["message"] = "Nu aveti dreptul sa adaugati un nou task!!";
                 TempData["messageType"] = "alert-danger";
-                return RedirectToAction("Show", "Projects", new {id = id});
+                return RedirectToAction("Show", "Projects", new {id = id}); 
             }
 
             
@@ -73,7 +73,7 @@ namespace App.NET.Controllers
             if (ModelState.IsValid)
             {
 
-                task.Title_task = sanitizer.Sanitize(task.Title_task);
+                task.Title_task = sanitizer.Sanitize(task.Title_task); 
                 task.Description_task = sanitizer.Sanitize(task.Description_task);
                 task.Media = sanitizer.Sanitize(task.Media);
 
@@ -95,8 +95,8 @@ namespace App.NET.Controllers
             }
             else
             {
-                Project project = _db.Projects.FirstOrDefault(p => p.Id == task.Project_id);
-                ViewBag.Project = project;
+                Project project = _db.Projects.FirstOrDefault(p => p.Id == task.Project_id); // preluam proiectul din baza de date
+                ViewBag.Project = project; 
                 return View(task);
             }
         }
@@ -107,7 +107,7 @@ namespace App.NET.Controllers
             
             var task = _db.Tasks.Include(t => t.User_task)
                     .Include(t => t.Comments)
-                    .ThenInclude(comment => comment.User)
+                    .ThenInclude(comment => comment.User) 
                     .Where(t => t.Id == id)
                     .First();
             /*
@@ -116,16 +116,16 @@ namespace App.NET.Controllers
             var comments = _db.Comments.Where(p => p.TaskId == id);
             ViewBag.Comments = comments;
             */
-            if (task == null)
+            if (task == null) 
             {
                 return NotFound();
             }
-            ViewBag.UserCurent = _userManager.GetUserId(User);
+            ViewBag.UserCurent = _userManager.GetUserId(User); 
 
             if (_db.Projects.Any(p => p.Id == task.Project_id &&
-                                       (p.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))))
+                                       (p.Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin")))) // daca utilizatorul curent este organizatorul proiectului sau este admin
             {
-                SetAccessRights(_db.Projects.First(p => p.Id == task.Project_id).Users_Id == _userManager.GetUserId(User));
+                SetAccessRights(_db.Projects.First(p => p.Id == task.Project_id).Users_Id == _userManager.GetUserId(User)); // daca utilizatorul curent este organizatorul proiectului ii dam acces la butoanele de editare si stergere a task-ului
             }
             else
             {
@@ -133,10 +133,10 @@ namespace App.NET.Controllers
                 ViewBag.EsteAdmin = false;
             }
 
-            var localUser = _userManager.GetUserId(User);
+            var localUser = _userManager.GetUserId(User); 
 
 
-            if (_db.UserProjects.Count(up => up.User_id == localUser && up.Project_id == task.Project_id) == 0 && !User.IsInRole("Admin"))
+            if (_db.UserProjects.Count(up => up.User_id == localUser && up.Project_id == task.Project_id) == 0 && !User.IsInRole("Admin")) // daca utilizatorul curent nu este membru al proiectului si nu este admin
             {
                 TempData["message"] = "Nu aveti dreptul la acest task!!";
                 TempData["messageType"] = "alert-danger";
@@ -156,7 +156,7 @@ namespace App.NET.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show([FromForm] Comment comment)
         {
-            comment.Date = DateTime.Now;
+            comment.Date = DateTime.Now; 
 
             // preluam id-ul utilizatorului care posteaza comentariul
             comment.UserId = _userManager.GetUserId(User);
@@ -165,36 +165,36 @@ namespace App.NET.Controllers
             {
                 _db.Comments.Add(comment);
                 _db.SaveChanges();
-                return Redirect("/Tasks/Show/" + comment.TaskId);
+                return Redirect("/Tasks/Show/" + comment.TaskId); 
             }
 
             else
             {
-                Task_table art = _db.Tasks.Include(art => art.User_task)
-                                        .Include(art => art.Comments)
+                Task_table tsk = _db.Tasks.Include(tsk => tsk.User_task)
+                                        .Include(tsk => tsk.Comments)
                                         .ThenInclude(comment => comment.User)
-                                        .Where(art => art.Id == comment.TaskId)
+                                        .Where(tsk => tsk.Id == comment.TaskId) 
                                         .First();
 
 
-                SetAccessRights();
+                SetAccessRights(); 
 
-                return View(art);
+                return View(tsk);
             }
         }
 
         [Authorize(Roles = "User,Editor,Admin")]
-        public IActionResult Add_Users(int id)//id from the task
+        public IActionResult Add_Users(int id)
         {
             var task = _db.Tasks.Find(id);
             if (_db.Projects.Where(p => p.Id == task.Project_id).First().Users_Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
-                var users = _db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id));
-                if (users.Count() == 0) { ViewBag.none = true; }
+                var users = _db.Users.Where(user => user.UserProjects.Any(j => j.Project_id == task.Project_id) && user.User_task.All(j => j.Task_id != task.Id)); // preluam toti utilizatorii care sunt membrii ai proiectului si nu sunt membrii ai task-ului
+                if (users.Count() == 0) { ViewBag.none = true; }  
                 else { ViewBag.none = false; }
                 ViewBag.task = task;
 
-                return View(users);
+                return View(users); // afisam utilizatorii care pot fi adaugati la task
             }
             else
             {
@@ -231,16 +231,16 @@ namespace App.NET.Controllers
             {
                 Task_table task = _db.Tasks.FirstOrDefault(t => t.Id == id);
 
-                updatedTask.Title_task = sanitizer.Sanitize(updatedTask.Title_task);
-                updatedTask.Description_task = sanitizer.Sanitize(updatedTask.Description_task);
-                updatedTask.Media = sanitizer.Sanitize(updatedTask.Media);
+                task.Title_task = sanitizer.Sanitize(updatedTask.Title_task);
+                task.Description_task = sanitizer.Sanitize(updatedTask.Description_task);
+                task.Media = sanitizer.Sanitize(updatedTask.Media);
 
-                task.Title_task = updatedTask.Title_task;
-                task.Description_task = updatedTask.Description_task;
+                //task.Title_task = updatedTask.Title_task;
+                //task.Description_task = updatedTask.Description_task;
                 task.Status = updatedTask.Status;
                 task.Data_start = updatedTask.Data_start;
                 task.Data_end = updatedTask.Data_end;
-                task.Media = updatedTask.Media;
+                //task.Media = updatedTask.Media;
 
                 _db.SaveChanges();
 
@@ -263,7 +263,7 @@ namespace App.NET.Controllers
         public IActionResult Delete(int id)
         {
             Task_table task = _db.Tasks.FirstOrDefault(t => t.Id == id);
-            int projectId = (int)task.Project_id;
+            int projectId = (int)task.Project_id; 
 
             _db.Tasks.Remove(task);
             _db.SaveChanges();
@@ -284,7 +284,7 @@ namespace App.NET.Controllers
             {
                 ViewBag.EsteOrganizator = false;
             }
-            ViewBag.EsteAdmin = User.IsInRole("Admin"); //folosit pentru zonele in care doar adminul poate face lucruri
+            ViewBag.EsteAdmin = User.IsInRole("Admin"); // daca utilizatorul curent este admin ii dam acces la butoanele de editare si stergere a task-ului
 
 
         }
